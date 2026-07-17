@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SIAKAD — Absensi UNU Al-Ghozali</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;1,400&family=Inter:wght@300;400&family=Fira+Code:wght@400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400&family=Inter:wght@300;400;500&family=Fira+Code:wght@400&display=swap">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root { --forest-dark: #0d1310; --forest-mid: #1a2420; --off-white: #f4f4f4; }
@@ -18,17 +18,17 @@ body { font-family: 'Inter', sans-serif; background: var(--forest-dark); color: 
 .header p { opacity: 0.7; font-size: 0.9rem; }
 .auth-box { max-width: 450px; margin: 3rem auto; background: var(--forest-mid); padding: 2.5rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
 .tabs { display: flex; gap: 10px; margin-bottom: 2rem; background: rgba(255,255,255,0.05); padding: 5px; border-radius: 8px; }
-.tab { flex: 1; background: none; border: none; color: var(--off-white); padding: 0.8rem 0; font-family: 'Inter', sans-serif; font-size: 1rem; cursor: pointer; opacity: 0.5; border-radius: 6px; transition: 0.3s; }
-.tab.active { opacity: 1; background: var(--forest-dark); }
-.form-group { margin-bottom: 1.5rem; display: none; }
-.form-group.active { display: block; }
-label { display: block; font-family: 'Fira Code', monospace; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.6; margin-bottom: 0.5rem; }
+.tab-btn { flex: 1; background: none; border: none; color: var(--off-white); padding: 0.8rem 0; font-family: 'Inter', sans-serif; font-size: 1rem; cursor: pointer; opacity: 0.5; border-radius: 6px; transition: 0.3s; }
+.tab-btn.active { opacity: 1; background: var(--forest-dark); }
+.form-group { display: none; flex-direction: column; gap: 1.2rem; }
+.form-group.active { display: flex; }
+label { display: block; font-family: 'Fira Code', monospace; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.6; margin-bottom: -0.5rem; }
 .input-wrap { position: relative; }
-input { width: 100%; background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.2); padding: 0.7rem 0; color: var(--off-white); font-size: 1rem; }
+input { width: 100%; background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.2); padding: 0.7rem 35px 0.7rem 0; color: var(--off-white); font-size: 1rem; }
 input:focus { outline: none; border-bottom-color: var(--off-white); }
 .eye-btn { position: absolute; right: 0; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--off-white); cursor: pointer; font-size: 1.2rem; opacity: 0.6; }
-button.submit-btn { width: 100%; padding: 1rem; background: var(--off-white); color: var(--forest-dark); border: none; border-radius: 999px; font-size: 0.9rem; cursor: pointer; margin-top: 1rem; font-weight: 500; }
-button.submit-btn:hover { background: #fff; }
+.submit-btn { width: 100%; padding: 1rem; background: var(--off-white); color: var(--forest-dark); border: none; border-radius: 999px; font-size: 0.9rem; cursor: pointer; margin-top: 0.5rem; font-weight: 500; }
+.submit-btn:hover { background: #fff; }
 .msg { padding: 0.8rem; border-radius: 6px; margin-bottom: 1rem; font-size: 0.85rem; display: none; }
 .msg.error { background: rgba(255,100,100,0.1); color: #ff6b6b; border: 1px solid rgba(255,100,100,0.3); display: block; }
 .msg.success { background: rgba(100,255,100,0.1); color: #6bff6b; border: 1px solid rgba(100,255,100,0.3); display: block; }
@@ -57,16 +57,16 @@ button.submit-btn:hover { background: #fff; }
     <div class="auth-box">
       <div class="msg" id="auth-msg"></div>
       <div class="tabs">
-        <button class="tab active" onclick="switchTab('login')">Masuk</button>
-        <button class="tab" onclick="switchTab('signup')">Daftar Akun</button>
+        <button type="button" class="tab-btn active" onclick="switchTab('login')">Masuk</button>
+        <button type="button" class="tab-btn" onclick="switchTab('signup')">Daftar Akun</button>
       </div>
 
       <form id="login-form" class="form-group active" onsubmit="handleLogin(event)">
-        <div style="margin-bottom: 1rem;">
+        <div>
           <label>Email</label>
           <input type="email" id="login-email" placeholder="nama@kampus.ac.id" required>
         </div>
-        <div style="margin-bottom: 1rem;">
+        <div>
           <label>Password</label>
           <div class="input-wrap">
             <input type="password" id="login-password" placeholder="Min. 6 karakter" required>
@@ -77,19 +77,19 @@ button.submit-btn:hover { background: #fff; }
       </form>
 
       <form id="signup-form" class="form-group" onsubmit="handleSignup(event)">
-        <div style="margin-bottom: 1rem;">
+        <div>
           <label>Nama Lengkap</label>
           <input type="text" id="signup-nama" placeholder="Sesuai KTM" required>
         </div>
-        <div style="margin-bottom: 1rem;">
+        <div>
           <label>NIM</label>
           <input type="text" id="signup-nim" placeholder="10 digit" required>
         </div>
-        <div style="margin-bottom: 1rem;">
+        <div>
           <label>Email</label>
           <input type="email" id="signup-email" placeholder="nama@kampus.ac.id" required>
         </div>
-        <div style="margin-bottom: 1rem;">
+        <div>
           <label>Password (min. 6 karakter)</label>
           <div class="input-wrap">
             <input type="password" id="signup-password" placeholder="Buat password" required>
@@ -139,27 +139,21 @@ button.submit-btn:hover { background: #fff; }
   </div>
 </div>
 
+<!-- SCRIPT 1: UNTUK TOMBOL UI (TOMBOL DAFTAR & MATA) -->
 <script>
-// === PASTE URL DAN ANON KEY SUPABASE ANDA DI BAWAH INI ===
-const SUPABASE_URL = 'https://dvvqtaahugjwnsfdtyjf.supabase.co/rest/v1/';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2dnF0YWFodWdqd25zZmR0eWpmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQyODcyNTksImV4cCI6MjA5OTg2MzI1OX0.lqfBnvMlSvr43onR-PQZdTpCeSInWD6rvbHLZTJkvPA';
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-// Fungsi untuk pindah tab Login/Daftar
 function switchTab(tab) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.form-group').forEach(f => f.classList.remove('active'));
   if (tab === 'login') {
-    document.querySelectorAll('.tab')[0].classList.add('active');
+    document.querySelectorAll('.tab-btn')[0].classList.add('active');
     document.getElementById('login-form').classList.add('active');
   } else {
-    document.querySelectorAll('.tab')[1].classList.add('active');
+    document.querySelectorAll('.tab-btn')[1].classList.add('active');
     document.getElementById('signup-form').classList.add('active');
   }
   document.getElementById('auth-msg').className = 'msg';
 }
 
-// Fungsi untuk melihat/sembunyikan password
 function togglePass(inputId, btn) {
   const input = document.getElementById(inputId);
   if (input.type === 'password') {
@@ -176,9 +170,27 @@ function showMsg(type, text) {
   msg.className = 'msg ' + type;
   msg.textContent = text;
 }
+</script>
+
+<!-- SCRIPT 2: UNTUK KONEKSI DATABASE SUPABASE -->
+<script>
+// GANTI TULISAN DI BAWAH INI DENGAN KEY SUPABASE ANDA
+const SUPABASE_URL = 'https://dvvqtaahugjwnsfdtyjf.supabase.co/rest/v1/';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2dnF0YWFodWdqd25zZmR0eWpmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQyODcyNTksImV4cCI6MjA5OTg2MzI1OX0.lqfBnvMlSvr43onR-PQZdTpCeSInWD6rvbHLZTJkvPA';
+
+let supabase = null;
+try {
+  if (!SUPABASE_URL.includes('PASTE_')) {
+    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  }
+} catch (e) {
+  console.error("Supabase init error:", e);
+}
 
 async function handleSignup(e) {
   e.preventDefault();
+  if (!supabase) { showMsg('error', 'Koneksi database belum siap! Cek API Key di kode.'); return; }
+  
   const nama = document.getElementById('signup-nama').value;
   const nim = document.getElementById('signup-nim').value;
   const email = document.getElementById('signup-email').value;
@@ -193,11 +205,14 @@ async function handleSignup(e) {
     showMsg('error', error.message);
   } else {
     showMsg('success', 'Pendaftaran berhasil! Cek email Anda untuk verifikasi, lalu Masuk.');
+    switchTab('login');
   }
 }
 
 async function handleLogin(e) {
   e.preventDefault();
+  if (!supabase) { showMsg('error', 'Koneksi database belum siap! Cek API Key di kode.'); return; }
+  
   const email = document.getElementById('login-email').value;
   const password = document.getElementById('login-password').value;
 
@@ -209,7 +224,7 @@ async function handleLogin(e) {
   }
 }
 
-async function enterDashboard(user) {
+function enterDashboard(user) {
   const nama = user.user_metadata?.nama || 'Mahasiswa';
   const nim = user.user_metadata?.nim || '-';
   
@@ -221,13 +236,15 @@ async function enterDashboard(user) {
 }
 
 async function handleLogout() {
-  await supabase.auth.signOut();
+  if (supabase) await supabase.auth.signOut();
   document.getElementById('dashboard-section').classList.remove('active');
   document.getElementById('auth-section').style.display = 'block';
   switchTab('login');
 }
 
 async function absen(btn, courseName) {
+  if (!supabase) { alert('Koneksi database belum siap!'); return; }
+  
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return;
 
@@ -246,8 +263,8 @@ async function absen(btn, courseName) {
   }
 }
 
-// Cek sesi login saat halaman dimuat
 window.addEventListener('load', async () => {
+  if (!supabase) return;
   const { data: { session } } = await supabase.auth.getSession();
   if (session && session.user) {
     enterDashboard(session.user);
