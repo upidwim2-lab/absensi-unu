@@ -11,7 +11,6 @@
 :root {
   --forest-dark: #0d1310;
   --forest-mid: #1a2420;
-  --forest-light: #243530;
   --off-white: #f4f4f4;
   --green-accent: #4ade80;
   --green-dim: rgba(74,222,128,0.15);
@@ -20,483 +19,107 @@
   --yellow-accent: #fbbf24;
   --yellow-dim: rgba(251,191,36,0.15);
 }
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:var(--forest-dark);color:var(--off-white);line-height:1.7;min-height:100vh;overflow-x:hidden}
 
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+.toast-container{position:fixed;top:1.5rem;right:1.5rem;z-index:9999;display:flex;flex-direction:column;gap:.75rem;pointer-events:none}
+.toast{pointer-events:auto;background:var(--forest-mid);border:1px solid rgba(255,255,255,.1);color:var(--off-white);padding:.9rem 1.4rem;border-radius:10px;font-size:.85rem;max-width:380px;box-shadow:0 10px 40px rgba(0,0,0,.5);display:flex;align-items:flex-start;gap:.7rem;animation:toastIn .35s ease-out;border-left:3px solid rgba(255,255,255,.2)}
+.toast.success{border-left-color:var(--green-accent)}
+.toast.error{border-left-color:var(--red-accent)}
+.toast.warning{border-left-color:var(--yellow-accent)}
+.toast-icon{flex-shrink:0;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;margin-top:1px}
+.toast.success .toast-icon{background:var(--green-dim);color:var(--green-accent)}
+.toast.error .toast-icon{background:var(--red-dim);color:var(--red-accent)}
+.toast.warning .toast-icon{background:var(--yellow-dim);color:var(--yellow-accent)}
+.toast-text{flex:1}
+.toast-text strong{display:block;font-weight:600;margin-bottom:2px}
+.toast-text span{opacity:.75;font-size:.8rem}
+.toast.leaving{animation:toastOut .3s ease-in forwards}
+@keyframes toastIn{from{opacity:0;transform:translateX(60px) scale(.95)}to{opacity:1;transform:translateX(0) scale(1)}}
+@keyframes toastOut{from{opacity:1;transform:translateX(0) scale(1)}to{opacity:0;transform:translateX(60px) scale(.9)}}
 
-body {
-  font-family: 'Inter', sans-serif;
-  background: var(--forest-dark);
-  color: var(--off-white);
-  line-height: 1.7;
-  min-height: 100vh;
-  overflow-x: hidden;
-}
+.container{max-width:1000px;margin:0 auto;padding:0 1.5rem}
+.section{padding:4rem 0}
+.header{padding:3.5rem 0 2rem;text-align:center;background:var(--forest-mid);border-bottom:1px solid rgba(255,255,255,.06)}
+.header h1{font-family:'EB Garamond',serif;font-size:2.4rem;font-weight:500;letter-spacing:-.01em}
+.header p{opacity:.5;font-size:.85rem;margin-top:.3rem;font-family:'Fira Code',monospace;letter-spacing:.04em}
 
-/* ── Toast ── */
-.toast-container {
-  position: fixed;
-  top: 1.5rem;
-  right: 1.5rem;
-  z-index: 9999;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  pointer-events: none;
-}
+.auth-box{max-width:440px;margin:2.5rem auto;background:var(--forest-mid);padding:2.2rem;border-radius:14px;border:1px solid rgba(255,255,255,.08);box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.tabs{display:flex;gap:4px;margin-bottom:2rem;background:rgba(255,255,255,.04);padding:4px;border-radius:10px}
+.tab-btn{flex:1;background:none;border:none;color:var(--off-white);padding:.75rem 0;font-family:'Inter',sans-serif;font-size:.9rem;font-weight:500;cursor:pointer;opacity:.4;border-radius:7px;transition:all .3s ease}
+.tab-btn:hover{opacity:.65}
+.tab-btn.active{opacity:1;background:var(--forest-dark);box-shadow:0 2px 8px rgba(0,0,0,.3)}
 
-.toast {
-  pointer-events: auto;
-  background: var(--forest-mid);
-  border: 1px solid rgba(255,255,255,0.1);
-  color: var(--off-white);
-  padding: 0.9rem 1.4rem;
-  border-radius: 10px;
-  font-size: 0.85rem;
-  max-width: 380px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-  display: flex;
-  align-items: flex-start;
-  gap: 0.7rem;
-  animation: toastIn 0.35s ease-out;
-  border-left: 3px solid rgba(255,255,255,0.2);
-}
+.form-group{display:none;flex-direction:column;gap:1.1rem}
+.form-group.active{display:flex;animation:fadeUp .3s ease-out}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
-.toast.success { border-left-color: var(--green-accent); }
-.toast.error   { border-left-color: var(--red-accent); }
-.toast.warning  { border-left-color: var(--yellow-accent); }
+.field{display:flex;flex-direction:column;gap:.35rem}
+label{font-family:'Fira Code',monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;opacity:.5}
+.input-wrap{position:relative}
+input{width:100%;background:transparent;border:none;border-bottom:1px solid rgba(255,255,255,.15);padding:.65rem 40px .65rem 0;color:var(--off-white);font-family:'Inter',sans-serif;font-size:.95rem;transition:border-color .3s}
+input::placeholder{color:rgba(255,255,255,.2)}
+input:focus{outline:none;border-bottom-color:var(--off-white)}
+input.invalid{border-bottom-color:var(--red-accent)}
+.field-error{font-size:.75rem;color:var(--red-accent);min-height:1.1rem;opacity:0;transition:opacity .2s}
+.field-error.show{opacity:1}
 
-.toast-icon {
-  flex-shrink: 0;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.7rem;
-  font-weight: 700;
-  margin-top: 1px;
-}
+.eye-btn{position:absolute;right:0;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--off-white);cursor:pointer;font-size:1.1rem;opacity:.4;transition:opacity .2s;padding:4px 6px;line-height:1}
+.eye-btn:hover{opacity:.8}
 
-.toast.success .toast-icon { background: var(--green-dim); color: var(--green-accent); }
-.toast.error   .toast-icon { background: var(--red-dim); color: var(--red-accent); }
-.toast.warning  .toast-icon { background: var(--yellow-dim); color: var(--yellow-accent); }
+.submit-btn{width:100%;padding:.95rem;background:var(--off-white);color:var(--forest-dark);border:none;border-radius:999px;font-size:.9rem;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;margin-top:.6rem;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:.5rem;min-height:48px}
+.submit-btn:hover{background:#fff;transform:translateY(-1px);box-shadow:0 4px 15px rgba(255,255,255,.1)}
+.submit-btn:active{transform:translateY(0)}
+.submit-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+.spinner{width:18px;height:18px;border:2px solid transparent;border-top-color:var(--forest-dark);border-radius:50%;animation:spin .6s linear infinite;display:none}
+.submit-btn.loading .spinner{display:block}
+.submit-btn.loading .btn-text{opacity:.6}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-.toast-text { flex: 1; }
-.toast-text strong { display: block; font-weight: 600; margin-bottom: 2px; }
-.toast-text span { opacity: 0.75; font-size: 0.8rem; }
-.toast.leaving { animation: toastOut 0.3s ease-in forwards; }
+.dashboard{display:none;padding:3rem 0 5rem}
+.dashboard.active{display:block;animation:fadeUp .4s ease-out}
+.topbar{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,.08);padding-bottom:1.2rem;margin-bottom:2.5rem;flex-wrap:wrap;gap:1rem}
+.user-info h2{font-family:'EB Garamond',serif;font-weight:500;font-size:1.7rem}
+.user-info p{font-family:'Fira Code',monospace;font-size:.78rem;opacity:.45;margin-top:.15rem}
+.logout-btn{background:none;border:1px solid rgba(255,255,255,.2);color:var(--off-white);padding:.5rem 1.2rem;border-radius:999px;cursor:pointer;font-family:'Inter',sans-serif;font-size:.82rem;transition:all .2s}
+.logout-btn:hover{border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.05)}
+.section-title{font-family:'EB Garamond',serif;font-size:1.4rem;font-weight:400;margin-bottom:1.2rem;opacity:.9}
+.date-badge{display:inline-flex;align-items:center;gap:.5rem;background:var(--forest-mid);border:1px solid rgba(255,255,255,.08);padding:.5rem 1rem;border-radius:999px;font-family:'Fira Code',monospace;font-size:.75rem;opacity:.7;margin-bottom:1.5rem}
+.date-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green-accent);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 
-@keyframes toastIn {
-  from { opacity: 0; transform: translateX(60px) scale(0.95); }
-  to   { opacity: 1; transform: translateX(0) scale(1); }
-}
-@keyframes toastOut {
-  from { opacity: 1; transform: translateX(0) scale(1); }
-  to   { opacity: 0; transform: translateX(60px) scale(0.9); }
-}
+.card{background:var(--forest-mid);padding:1.3rem 1.5rem;border-radius:12px;margin-bottom:.75rem;display:flex;justify-content:space-between;align-items:center;border:1px solid rgba(255,255,255,.06);transition:border-color .2s,box-shadow .2s;flex-wrap:wrap;gap:1rem}
+.card:hover{border-color:rgba(255,255,255,.12);box-shadow:0 4px 20px rgba(0,0,0,.2)}
+.card-info h3{font-family:'EB Garamond',serif;font-size:1.15rem;font-weight:500}
+.card-info p{font-size:.8rem;opacity:.5;margin-top:.2rem}
+.absen-btn{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.2);color:var(--off-white);padding:.55rem 1.1rem;border-radius:999px;cursor:pointer;font-family:'Inter',sans-serif;font-size:.8rem;font-weight:500;transition:all .25s;white-space:nowrap;display:inline-flex;align-items:center;gap:.4rem;min-height:38px}
+.absen-btn:hover:not(:disabled){background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.35);transform:translateY(-1px)}
+.absen-btn:disabled{cursor:not-allowed}
+.absen-btn.loading{opacity:.6;pointer-events:none}
+.absen-btn.done{background:var(--green-dim);border-color:rgba(74,222,128,.3);color:var(--green-accent);cursor:default}
+.absen-btn.error-state{background:var(--red-dim);border-color:rgba(248,113,113,.3);color:var(--red-accent)}
 
-/* ── Layout ── */
-.container { max-width: 1000px; margin: 0 auto; padding: 0 1.5rem; }
-.section { padding: 4rem 0; }
+.history-section{margin-top:3rem}
+.history-empty{text-align:center;padding:3rem 1rem;opacity:.3;font-size:.9rem}
+.history-list{display:flex;flex-direction:column;gap:.5rem}
+.history-item{display:flex;justify-content:space-between;align-items:center;padding:.8rem 1.2rem;background:var(--forest-mid);border-radius:8px;border:1px solid rgba(255,255,255,.04);font-size:.85rem;flex-wrap:wrap;gap:.5rem}
+.history-item .h-course{font-weight:500}
+.history-item .h-date{font-family:'Fira Code',monospace;font-size:.72rem;opacity:.4}
+.history-item .h-status{font-family:'Fira Code',monospace;font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--green-accent);background:var(--green-dim);padding:.2rem .6rem;border-radius:999px}
 
-/* ── Header ── */
-.header {
-  padding: 3.5rem 0 2rem;
-  text-align: center;
-  background: var(--forest-mid);
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-}
-
-.header h1 {
-  font-family: 'EB Garamond', serif;
-  font-size: 2.4rem;
-  font-weight: 500;
-  letter-spacing: -0.01em;
-}
-
-.header p {
-  opacity: 0.5;
-  font-size: 0.85rem;
-  margin-top: 0.3rem;
-  font-family: 'Fira Code', monospace;
-  letter-spacing: 0.04em;
-}
-
-/* ── Setup Banner ── */
-.setup-banner {
-  display: none;
-  background: var(--yellow-dim);
-  border: 1px solid rgba(251,191,36,0.3);
-  color: var(--yellow-accent);
-  padding: 1rem 1.5rem;
-  border-radius: 10px;
-  margin-bottom: 2rem;
-  font-size: 0.85rem;
-  line-height: 1.8;
-}
-
-.setup-banner code {
-  background: rgba(0,0,0,0.3);
-  padding: 0.15rem 0.4rem;
-  border-radius: 4px;
-  font-family: 'Fira Code', monospace;
-  font-size: 0.78rem;
-}
-
-.setup-banner.visible { display: block; }
-
-/* ── Auth Box ── */
-.auth-box {
-  max-width: 440px;
-  margin: 2.5rem auto;
-  background: var(--forest-mid);
-  padding: 2.2rem;
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,0.08);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-}
-
-.tabs {
-  display: flex;
-  gap: 4px;
-  margin-bottom: 2rem;
-  background: rgba(255,255,255,0.04);
-  padding: 4px;
-  border-radius: 10px;
-}
-
-.tab-btn {
-  flex: 1;
-  background: none;
-  border: none;
-  color: var(--off-white);
-  padding: 0.75rem 0;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.9rem;
-  font-weight: 500;
-  cursor: pointer;
-  opacity: 0.4;
-  border-radius: 7px;
-  transition: all 0.3s ease;
-  position: relative;
-  z-index: 2;
-}
-
-.tab-btn:hover { opacity: 0.65; }
-.tab-btn.active { opacity: 1; background: var(--forest-dark); box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
-
-.form-group { display: none; flex-direction: column; gap: 1.1rem; }
-.form-group.active { display: flex; animation: fadeUp 0.3s ease-out; }
-
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-.field { display: flex; flex-direction: column; gap: 0.35rem; }
-
-label {
-  font-family: 'Fira Code', monospace;
-  font-size: 0.68rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  opacity: 0.5;
-}
-
-.input-wrap { position: relative; }
-
-input {
-  width: 100%;
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid rgba(255,255,255,0.15);
-  padding: 0.65rem 38px 0.65rem 0;
-  color: var(--off-white);
-  font-family: 'Inter', sans-serif;
-  font-size: 0.95rem;
-  transition: border-color 0.3s;
-}
-
-input::placeholder { color: rgba(255,255,255,0.2); }
-input:focus { outline: none; border-bottom-color: var(--off-white); }
-input.invalid { border-bottom-color: var(--red-accent); }
-
-.field-error {
-  font-size: 0.75rem;
-  color: var(--red-accent);
-  min-height: 1.1rem;
-  opacity: 0;
-  transition: opacity 0.2s;
-}
-
-.field-error.show { opacity: 1; }
-
-.eye-btn {
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  color: var(--off-white);
-  cursor: pointer;
-  font-size: 0.85rem;
-  opacity: 0.4;
-  transition: opacity 0.2s;
-  padding: 4px;
-  z-index: 2;
-}
-
-.eye-btn:hover { opacity: 0.8; }
-
-/* SVG di dalam tombol tidak boleh menelan klik */
-.eye-btn svg {
-  pointer-events: none;
-  display: block;
-}
-
-.submit-btn {
-  width: 100%;
-  padding: 0.95rem;
-  background: var(--off-white);
-  color: var(--forest-dark);
-  border: none;
-  border-radius: 999px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  font-family: 'Inter', sans-serif;
-  cursor: pointer;
-  margin-top: 0.6rem;
-  transition: all 0.2s;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  min-height: 48px;
-}
-
-.submit-btn:hover { background: #fff; transform: translateY(-1px); box-shadow: 0 4px 15px rgba(255,255,255,0.1); }
-.submit-btn:active { transform: translateY(0); }
-.submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
-
-.spinner {
-  width: 18px;
-  height: 18px;
-  border: 2px solid transparent;
-  border-top-color: var(--forest-dark);
-  border-radius: 50%;
-  animation: spin 0.6s linear infinite;
-  display: none;
-}
-
-.submit-btn.loading .spinner { display: block; }
-.submit-btn.loading .btn-text { opacity: 0.6; }
-
-@keyframes spin { to { transform: rotate(360deg); } }
-
-/* ── Dashboard ── */
-.dashboard { display: none; padding: 3rem 0 5rem; }
-.dashboard.active { display: block; animation: fadeUp 0.4s ease-out; }
-
-.topbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-  padding-bottom: 1.2rem;
-  margin-bottom: 2.5rem;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.user-info h2 {
-  font-family: 'EB Garamond', serif;
-  font-weight: 500;
-  font-size: 1.7rem;
-}
-
-.user-info p {
-  font-family: 'Fira Code', monospace;
-  font-size: 0.78rem;
-  opacity: 0.45;
-  margin-top: 0.15rem;
-}
-
-.logout-btn {
-  background: none;
-  border: 1px solid rgba(255,255,255,0.2);
-  color: var(--off-white);
-  padding: 0.5rem 1.2rem;
-  border-radius: 999px;
-  cursor: pointer;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.82rem;
-  transition: all 0.2s;
-}
-
-.logout-btn:hover { border-color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.05); }
-
-.section-title {
-  font-family: 'EB Garamond', serif;
-  font-size: 1.4rem;
-  font-weight: 400;
-  margin-bottom: 1.2rem;
-  opacity: 0.9;
-}
-
-.date-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: var(--forest-mid);
-  border: 1px solid rgba(255,255,255,0.08);
-  padding: 0.5rem 1rem;
-  border-radius: 999px;
-  font-family: 'Fira Code', monospace;
-  font-size: 0.75rem;
-  opacity: 0.7;
-  margin-bottom: 1.5rem;
-}
-
-.date-badge::before {
-  content: '';
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--green-accent);
-  animation: pulse 2s ease-in-out infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.3; }
-}
-
-/* ── Course Cards ── */
-.card {
-  background: var(--forest-mid);
-  padding: 1.3rem 1.5rem;
-  border-radius: 12px;
-  margin-bottom: 0.75rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border: 1px solid rgba(255,255,255,0.06);
-  transition: border-color 0.2s, box-shadow 0.2s;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.card:hover { border-color: rgba(255,255,255,0.12); box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
-
-.card-info h3 {
-  font-family: 'EB Garamond', serif;
-  font-size: 1.15rem;
-  font-weight: 500;
-}
-
-.card-info p {
-  font-size: 0.8rem;
-  opacity: 0.5;
-  margin-top: 0.2rem;
-}
-
-.absen-btn {
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.2);
-  color: var(--off-white);
-  padding: 0.55rem 1.1rem;
-  border-radius: 999px;
-  cursor: pointer;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.8rem;
-  font-weight: 500;
-  transition: all 0.25s;
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  min-height: 38px;
-}
-
-.absen-btn:hover:not(:disabled) {
-  background: rgba(255,255,255,0.12);
-  border-color: rgba(255,255,255,0.35);
-  transform: translateY(-1px);
-}
-
-.absen-btn:disabled { cursor: not-allowed; }
-.absen-btn.loading { opacity: 0.6; pointer-events: none; }
-
-.absen-btn.done {
-  background: var(--green-dim);
-  border-color: rgba(74,222,128,0.3);
-  color: var(--green-accent);
-  cursor: default;
-}
-
-.absen-btn.done svg { pointer-events: none; }
-
-.absen-btn.error-state {
-  background: var(--red-dim);
-  border-color: rgba(248,113,113,0.3);
-  color: var(--red-accent);
-}
-
-/* ── History ── */
-.history-section { margin-top: 3rem; }
-.history-empty {
-  text-align: center;
-  padding: 3rem 1rem;
-  opacity: 0.3;
-  font-size: 0.9rem;
-}
-
-.history-list { display: flex; flex-direction: column; gap: 0.5rem; }
-
-.history-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.8rem 1.2rem;
-  background: var(--forest-mid);
-  border-radius: 8px;
-  border: 1px solid rgba(255,255,255,0.04);
-  font-size: 0.85rem;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.history-item .h-course { font-weight: 500; }
-.history-item .h-date { font-family: 'Fira Code', monospace; font-size: 0.72rem; opacity: 0.4; }
-.history-item .h-status {
-  font-family: 'Fira Code', monospace;
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--green-accent);
-  background: var(--green-dim);
-  padding: 0.2rem 0.6rem;
-  border-radius: 999px;
-}
-
-/* ── Responsive ── */
-@media (max-width: 600px) {
-  .header h1 { font-size: 1.8rem; }
-  .auth-box { padding: 1.5rem; margin: 1.5rem auto; }
-  .topbar { flex-direction: column; align-items: flex-start; }
-  .card { flex-direction: column; align-items: flex-start; }
-  .absen-btn { align-self: flex-end; }
-  .toast { max-width: calc(100vw - 3rem); }
-  .toast-container { right: 1rem; left: 1rem; }
+@media(max-width:600px){
+  .header h1{font-size:1.8rem}
+  .auth-box{padding:1.5rem;margin:1.5rem auto}
+  .topbar{flex-direction:column;align-items:flex-start}
+  .card{flex-direction:column;align-items:flex-start}
+  .absen-btn{align-self:flex-end}
+  .toast{max-width:calc(100vw - 3rem)}
+  .toast-container{right:1rem;left:1rem}
 }
 </style>
 </head>
 <body>
 
-<!-- Toast Container -->
 <div class="toast-container" id="toastContainer"></div>
 
 <header class="header">
@@ -508,15 +131,6 @@ input.invalid { border-bottom-color: var(--red-accent); }
 
 <div class="container">
 
-  <!-- Setup Warning -->
-  <div class="setup-banner" id="setupBanner">
-    <strong>Supabase belum dikonfigurasi.</strong><br>
-    Buka file HTML ini, lalu ganti:<br>
-    <code>SUPABASE_URL</code> dan <code>SUPABASE_KEY</code> di bagian JavaScript.<br>
-    Pastikan juga tabel <code>attendance</code> sudah dibuat di SQL Editor Supabase.
-  </div>
-
-  <!-- ═══ AUTH SECTION ═══ -->
   <div id="auth-section" class="section">
     <div class="auth-box">
       <div class="tabs">
@@ -524,7 +138,6 @@ input.invalid { border-bottom-color: var(--red-accent); }
         <button type="button" class="tab-btn" onclick="switchTab('signup')">Daftar Akun</button>
       </div>
 
-      <!-- Login Form -->
       <form id="login-form" class="form-group active" onsubmit="handleLogin(event)" novalidate>
         <div class="field">
           <label for="login-email">Email</label>
@@ -537,9 +150,7 @@ input.invalid { border-bottom-color: var(--red-accent); }
           <label for="login-password">Password</label>
           <div class="input-wrap">
             <input type="password" id="login-password" placeholder="Min. 6 karakter" autocomplete="current-password">
-            <button type="button" class="eye-btn" onclick="togglePass('login-password', this)" aria-label="Tampilkan password">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-            </button>
+            <button type="button" class="eye-btn" onclick="togglePass('login-password', this)">&#128065;</button>
           </div>
           <div class="field-error" id="login-password-error"></div>
         </div>
@@ -549,7 +160,6 @@ input.invalid { border-bottom-color: var(--red-accent); }
         </button>
       </form>
 
-      <!-- Signup Form -->
       <form id="signup-form" class="form-group" onsubmit="handleSignup(event)" novalidate>
         <div class="field">
           <label for="signup-nama">Nama Lengkap</label>
@@ -576,9 +186,7 @@ input.invalid { border-bottom-color: var(--red-accent); }
           <label for="signup-password">Password (min. 6 karakter)</label>
           <div class="input-wrap">
             <input type="password" id="signup-password" placeholder="Buat password" autocomplete="new-password">
-            <button type="button" class="eye-btn" onclick="togglePass('signup-password', this)" aria-label="Tampilkan password">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-            </button>
+            <button type="button" class="eye-btn" onclick="togglePass('signup-password', this)">&#128065;</button>
           </div>
           <div class="field-error" id="signup-password-error"></div>
         </div>
@@ -590,7 +198,6 @@ input.invalid { border-bottom-color: var(--red-accent); }
     </div>
   </div>
 
-  <!-- ═══ DASHBOARD SECTION ═══ -->
   <div id="dashboard-section" class="dashboard">
     <div class="topbar">
       <div class="user-info">
@@ -599,13 +206,9 @@ input.invalid { border-bottom-color: var(--red-accent); }
       </div>
       <button class="logout-btn" onclick="handleLogout()">Keluar</button>
     </div>
-
     <div class="date-badge" id="dateBadge"></div>
-
     <h3 class="section-title">Jadwal & Absensi Hari Ini</h3>
-
     <div id="courseList"></div>
-
     <div class="history-section">
       <h3 class="section-title" style="margin-top:2.5rem;">Riwayat Absensi</h3>
       <div id="historyList">
@@ -617,41 +220,9 @@ input.invalid { border-bottom-color: var(--red-accent); }
 </div>
 
 <script>
-/* ══════════════════════════════════════════════════════════
-   KONFIGURASI SUPABASE
-   Ganti dua variabel di bawah ini dengan kredensial Anda.
-   Ditemukan di: Supabase Dashboard → Settings → API
-   ══════════════════════════════════════════════════════════ */
 var SUPABASE_URL = 'https://dvvqtaahugjwnsfdtyjf.supabase.co/rest/v1/';
 var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2dnF0YWFodWdqd25zZmR0eWpmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQyODcyNTksImV4cCI6MjA5OTg2MzI1OX0.lqfBnvMlSvr43onR-PQZdTpCeSInWD6rvbHLZTJkvPA';
 
-/* ══════════════════════════════════════════════════════════
-   SQL YANG HARUS DIJALANKAN DI SUPABASE SQL EDITOR:
-
-   CREATE TABLE IF NOT EXISTS attendance (
-     id            UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-     user_id       UUID REFERENCES auth.users(id) ON DELETE CASCADE,
-     student_name  TEXT NOT NULL,
-     course_name   TEXT NOT NULL,
-     status        TEXT NOT NULL DEFAULT 'hadir',
-     created_at    TIMESTAMPTZ DEFAULT now()
-   );
-
-   ALTER TABLE attendance ENABLE ROW LEVEL SECURITY;
-
-   CREATE POLICY "Siswa bisa insert milik sendiri"
-     ON attendance FOR INSERT
-     WITH CHECK (auth.uid() = user_id);
-
-   CREATE POLICY "Siswa bisa select milik sendiri"
-     ON attendance FOR SELECT
-     USING (auth.uid() = user_id);
-
-   CREATE UNIQUE INDEX IF NOT EXISTS attendance_daily_unique
-     ON attendance (user_id, course_name, date_trunc('day', created_at));
-   ══════════════════════════════════════════════════════════ */
-
-// ── Jadwal Kuliah ──
 var COURSES = [
   { name: 'Fiqih Muamalah',  time: '07:30 – 09:00', lecturer: 'Dr. H. Ahmad Fauzi, M.Ag' },
   { name: 'Ushul Fiqih',     time: '09:15 – 10:45', lecturer: 'Prof. Dr. Hj. Siti Aminah, M.H' },
@@ -659,12 +230,10 @@ var COURSES = [
   { name: 'Aqidah Akhlak',   time: '13:30 – 15:00', lecturer: 'Dr. H. Nuruddin, M.Si' }
 ];
 
-// ── State ──
 var supabase = null;
 var isSupabaseReady = false;
 var todayAttendance = {};
 
-// ── Inisialisasi Supabase ──
 try {
   if (typeof window.supabase !== 'undefined' && SUPABASE_URL.indexOf('PASTE_') === -1) {
     supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -674,19 +243,12 @@ try {
   console.error('Gagal inisialisasi Supabase:', err);
 }
 
-if (!isSupabaseReady) {
-  document.getElementById('setupBanner').classList.add('visible');
-}
-
-// ── Toast ──
 function showToast(type, title, message) {
   var container = document.getElementById('toastContainer');
   var icons = { success: '\u2713', error: '\u2715', warning: '!' };
   var toast = document.createElement('div');
   toast.className = 'toast ' + type;
-  toast.innerHTML =
-    '<div class="toast-icon">' + (icons[type] || '\u00B7') + '</div>' +
-    '<div class="toast-text"><strong>' + title + '</strong><span>' + message + '</span></div>';
+  toast.innerHTML = '<div class="toast-icon">' + (icons[type] || '\u00B7') + '</div><div class="toast-text"><strong>' + title + '</strong><span>' + message + '</span></div>';
   container.appendChild(toast);
   setTimeout(function() {
     toast.classList.add('leaving');
@@ -694,7 +256,6 @@ function showToast(type, title, message) {
   }, 4500);
 }
 
-// ── Tab Switch (onclick inline) ──
 function switchTab(tab) {
   var tabs = document.querySelectorAll('.tab-btn');
   var forms = document.querySelectorAll('.form-group');
@@ -710,360 +271,221 @@ function switchTab(tab) {
   clearAllErrors();
 }
 
-// ── Password Toggle (onclick inline) ──
 function togglePass(inputId, btn) {
   var input = document.getElementById(inputId);
   if (!input) return;
   if (input.type === 'password') {
     input.type = 'text';
-    btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+    btn.innerHTML = '&#128374;';
   } else {
     input.type = 'password';
-    btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+    btn.innerHTML = '&#128065;';
   }
 }
 
-// ── Validation ──
 function showError(id, msg) {
   var el = document.getElementById(id);
-  if (el) {
-    el.textContent = msg;
-    el.classList.add('show');
-  }
+  if (el) { el.textContent = msg; el.classList.add('show'); }
   var field = el ? el.parentElement : null;
-  if (field) {
-    var inp = field.querySelector('input');
-    if (inp) inp.classList.add('invalid');
-  }
+  if (field) { var inp = field.querySelector('input'); if (inp) inp.classList.add('invalid'); }
 }
-
 function clearError(id) {
   var el = document.getElementById(id);
-  if (el) {
-    el.textContent = '';
-    el.classList.remove('show');
-  }
+  if (el) { el.textContent = ''; el.classList.remove('show'); }
   var field = el ? el.parentElement : null;
-  if (field) {
-    var inp = field.querySelector('input');
-    if (inp) inp.classList.remove('invalid');
-  }
+  if (field) { var inp = field.querySelector('input'); if (inp) inp.classList.remove('invalid'); }
 }
-
 function clearAllErrors() {
   var errs = document.querySelectorAll('.field-error');
-  for (var i = 0; i < errs.length; i++) {
-    errs[i].textContent = '';
-    errs[i].classList.remove('show');
-  }
+  for (var i = 0; i < errs.length; i++) { errs[i].textContent = ''; errs[i].classList.remove('show'); }
   var inv = document.querySelectorAll('input.invalid');
   for (var i = 0; i < inv.length; i++) inv[i].classList.remove('invalid');
 }
-
 function setLoading(btnId, loading) {
   var btn = document.getElementById(btnId);
   if (!btn) return;
-  if (loading) {
-    btn.classList.add('loading');
-    btn.disabled = true;
-  } else {
-    btn.classList.remove('loading');
-    btn.disabled = false;
-  }
+  if (loading) { btn.classList.add('loading'); btn.disabled = true; }
+  else { btn.classList.remove('loading'); btn.disabled = false; }
 }
+function validateEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
+function validateNIM(n) { return /^\d{10}$/.test(n); }
 
-function validateEmail(email) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-}
-
-function validateNIM(nim) {
-  return /^\d{10}$/.test(nim);
-}
-
-// ── NIM: hanya angka ──
 document.getElementById('signup-nim').addEventListener('input', function() {
   this.value = this.value.replace(/\D/g, '').slice(0, 10);
 });
 
-// ── Hapus error saat mengetik ──
 var allInputs = document.querySelectorAll('.field input');
 for (var i = 0; i < allInputs.length; i++) {
   (function(inp) {
     inp.addEventListener('input', function() {
-      var errEl = inp.closest('.field');
-      if (errEl) errEl = errEl.querySelector('.field-error');
-      if (errEl && errEl.classList.contains('show')) {
-        errEl.textContent = '';
-        errEl.classList.remove('show');
-        inp.classList.remove('invalid');
-      }
+      var f = inp.closest('.field');
+      if (f) f = f.querySelector('.field-error');
+      if (f && f.classList.contains('show')) { f.textContent = ''; f.classList.remove('show'); inp.classList.remove('invalid'); }
     });
   })(allInputs[i]);
 }
 
-// ── Signup ──
 function handleSignup(e) {
   e.preventDefault();
   clearAllErrors();
-
-  if (!isSupabaseReady) {
-    showToast('warning', 'Belum Siap', 'Supabase belum dikonfigurasi. Lihat petunjuk di atas.');
-    return;
-  }
-
-  var nama     = document.getElementById('signup-nama').value.trim();
-  var nim      = document.getElementById('signup-nim').value.trim();
-  var email    = document.getElementById('signup-email').value.trim();
+  if (!isSupabaseReady) { showToast('warning', 'Belum Siap', 'Ganti SUPABASE_URL dan SUPABASE_KEY di kode HTML dengan kredensial Anda.'); return; }
+  var nama = document.getElementById('signup-nama').value.trim();
+  var nim = document.getElementById('signup-nim').value.trim();
+  var email = document.getElementById('signup-email').value.trim();
   var password = document.getElementById('signup-password').value;
-
   var valid = true;
-
   if (!nama) { showError('signup-nama-error', 'Nama lengkap wajib diisi.'); valid = false; }
   if (!validateNIM(nim)) { showError('signup-nim-error', 'NIM harus tepat 10 digit angka.'); valid = false; }
   if (!validateEmail(email)) { showError('signup-email-error', 'Format email tidak valid.'); valid = false; }
   if (password.length < 6) { showError('signup-password-error', 'Password minimal 6 karakter.'); valid = false; }
-
   if (!valid) return;
-
   setLoading('signup-btn', true);
-
   supabase.auth.signUp({
-    email: email,
-    password: password,
+    email: email, password: password,
     options: { data: { nama: nama, nim: nim } }
   }).then(function(result) {
-    var data = result.data;
-    var error = result.error;
     setLoading('signup-btn', false);
-
-    if (error) {
-      if (error.message.indexOf('already registered') !== -1) {
+    if (result.error) {
+      if (result.error.message.indexOf('already registered') !== -1) {
         showError('signup-email-error', 'Email ini sudah terdaftar.');
       } else {
-        showToast('error', 'Gagal Daftar', error.message);
+        showToast('error', 'Gagal Daftar', result.error.message);
       }
     } else {
-      showToast('success', 'Berhasil Daftar', 'Silakan cek email untuk verifikasi, lalu masuk.');
+      showToast('success', 'Berhasil Daftar', 'Silakan masuk dengan akun Anda.');
       document.getElementById('signup-form').reset();
       switchTab('login');
     }
   }).catch(function() {
     setLoading('signup-btn', false);
-    showToast('error', 'Kesalahan', 'Terjadi error tidak terduga. Coba lagi.');
+    showToast('error', 'Kesalahan', 'Terjadi error tidak terduga.');
   });
 }
 
-// ── Login ──
 function handleLogin(e) {
   e.preventDefault();
   clearAllErrors();
-
-  if (!isSupabaseReady) {
-    showToast('warning', 'Belum Siap', 'Supabase belum dikonfigurasi. Lihat petunjuk di atas.');
-    return;
-  }
-
-  var email    = document.getElementById('login-email').value.trim();
+  if (!isSupabaseReady) { showToast('warning', 'Belum Siap', 'Ganti SUPABASE_URL dan SUPABASE_KEY di kode HTML dengan kredensial Anda.'); return; }
+  var email = document.getElementById('login-email').value.trim();
   var password = document.getElementById('login-password').value;
-
   var valid = true;
-
   if (!validateEmail(email)) { showError('login-email-error', 'Format email tidak valid.'); valid = false; }
   if (password.length < 6) { showError('login-password-error', 'Password minimal 6 karakter.'); valid = false; }
-
   if (!valid) return;
-
   setLoading('login-btn', true);
-
-  supabase.auth.signInWithPassword({
-    email: email,
-    password: password
-  }).then(function(result) {
-    var data = result.data;
-    var error = result.error;
+  supabase.auth.signInWithPassword({ email: email, password: password }).then(function(result) {
     setLoading('login-btn', false);
-
-    if (error) {
-      if (error.message.indexOf('Invalid login') !== -1 || error.message.indexOf('Invalid credentials') !== -1) {
+    if (result.error) {
+      if (result.error.message.indexOf('Invalid') !== -1) {
         showError('login-password-error', 'Email atau password salah.');
-      } else if (error.message.indexOf('Email not confirmed') !== -1) {
+      } else if (result.error.message.indexOf('Email not confirmed') !== -1) {
         showError('login-email-error', 'Akun belum diverifikasi. Cek email Anda.');
       } else {
-        showToast('error', 'Gagal Masuk', error.message);
+        showToast('error', 'Gagal Masuk', result.error.message);
       }
     } else {
-      enterDashboard(data.user);
+      enterDashboard(result.data.user);
     }
   }).catch(function() {
     setLoading('login-btn', false);
-    showToast('error', 'Kesalahan', 'Terjadi error tidak terduga. Coba lagi.');
+    showToast('error', 'Kesalahan', 'Terjadi error tidak terduga.');
   });
 }
 
-// ── Dashboard ──
 function enterDashboard(user) {
   var nama = (user.user_metadata && user.user_metadata.nama) ? user.user_metadata.nama : 'Mahasiswa';
-  var nim  = (user.user_metadata && user.user_metadata.nim) ? user.user_metadata.nim : '\u2014';
-
+  var nim = (user.user_metadata && user.user_metadata.nim) ? user.user_metadata.nim : '\u2014';
   document.getElementById('user-greeting').textContent = 'Halo, ' + nama;
   document.getElementById('user-nim').textContent = 'NIM: ' + nim;
-
   var now = new Date();
-  var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-  document.getElementById('dateBadge').textContent = now.toLocaleDateString('id-ID', options);
-
+  document.getElementById('dateBadge').textContent = now.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
   renderCourses();
   loadHistory();
-
   document.getElementById('auth-section').style.display = 'none';
   document.getElementById('dashboard-section').classList.add('active');
 }
 
-// ── Render Courses ──
 function renderCourses() {
   var container = document.getElementById('courseList');
   container.innerHTML = '';
-
   for (var i = 0; i < COURSES.length; i++) {
-    var course = COURSES[i];
-    var isDone = todayAttendance[course.name];
+    var c = COURSES[i];
+    var done = todayAttendance[c.name];
     var card = document.createElement('div');
     card.className = 'card';
-
-    var btnHtml;
-    if (isDone) {
-      btnHtml = '<button class="absen-btn done" disabled>' +
-        '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Tercatat</button>';
+    var btn;
+    if (done) {
+      btn = '<button class="absen-btn done" disabled>\u2713 Tercatat</button>';
     } else {
-      btnHtml = '<button class="absen-btn" onclick="handleAbsen(this, \'' + course.name.replace(/'/g, "\\'") + '\')">Tandai Hadir</button>';
+      btn = '<button class="absen-btn" onclick="handleAbsen(this,\'' + c.name.replace(/'/g, "\\'") + '\')">Tandai Hadir</button>';
     }
-
-    card.innerHTML =
-      '<div class="card-info"><h3>' + course.name + '</h3><p>' + course.time + ' | ' + course.lecturer + '</p></div>' +
-      btnHtml;
-
+    card.innerHTML = '<div class="card-info"><h3>' + c.name + '</h3><p>' + c.time + ' | ' + c.lecturer + '</p></div>' + btn;
     container.appendChild(card);
   }
 }
 
-// ── Absensi ──
 function handleAbsen(btn, courseName) {
-  if (!isSupabaseReady || !supabase) {
-    showToast('error', 'Gagal', 'Koneksi database belum siap.');
-    return;
-  }
-
-  var originalText = btn.innerHTML;
-  btn.innerHTML = '<span style="display:inline-block;width:14px;height:14px;border:2px solid transparent;border-top-color:currentColor;border-radius:50%;animation:spin 0.6s linear infinite;"></span>';
+  if (!isSupabaseReady || !supabase) { showToast('error', 'Gagal', 'Koneksi database belum siap.'); return; }
+  var orig = btn.innerHTML;
+  btn.innerHTML = '<span style="display:inline-block;width:14px;height:14px;border:2px solid transparent;border-top-color:currentColor;border-radius:50%;animation:spin .6s linear infinite;"></span>';
   btn.classList.add('loading');
 
-  supabase.auth.getUser().then(function(result) {
-    var user = result.data.user;
-    if (!user) {
-      btn.innerHTML = originalText;
-      btn.classList.remove('loading');
-      showToast('error', 'Sesi Habis', 'Silakan masuk kembali.');
-      handleLogout();
-      return;
-    }
-
+  Promise.all([
+    supabase.auth.getUser(),
+    supabase.from('profiles').select('nim').single()
+  ]).then(function(res) {
+    var user = res[0].data.user;
+    if (!user) { btn.innerHTML = orig; btn.classList.remove('loading'); showToast('error', 'Sesi Habis', 'Silakan masuk kembali.'); handleLogout(); return; }
     var nama = (user.user_metadata && user.user_metadata.nama) ? user.user_metadata.nama : 'Mahasiswa';
-
-    return supabase.from('attendance').insert([{
-      user_id: user.id,
-      student_name: nama,
-      course_name: courseName,
-      status: 'hadir'
-    }]);
+    var nim = (res[1].data && res[1].data.nim) ? res[1].data.nim : '';
+    return supabase.from('attendance').insert([{ user_id: user.id, student_name: nama, nim: nim, course_name: courseName, status: 'hadir' }]);
   }).then(function(result) {
-    if (!result) return; // Sudah di-handle di atas (session habis)
-    var error = result.error;
-
-    if (error) {
-      btn.innerHTML = originalText;
-      btn.classList.remove('loading');
-
-      if (error.code === '23505' || error.message.indexOf('duplicate') !== -1 || error.message.indexOf('unique') !== -1) {
-        todayAttendance[courseName] = true;
-        renderCourses();
-        showToast('warning', 'Sudah Tercatat', 'Anda sudah mengisi absensi untuk ' + courseName + ' hari ini.');
+    if (!result) return;
+    if (result.error) {
+      btn.innerHTML = orig; btn.classList.remove('loading');
+      if (result.error.code === '23505' || result.error.message.indexOf('duplicate') !== -1 || result.error.message.indexOf('unique') !== -1) {
+        todayAttendance[courseName] = true; renderCourses();
+        showToast('warning', 'Sudah Tercatat', 'Anda sudah absen ' + courseName + ' hari ini.');
       } else {
-        btn.classList.add('error-state');
-        setTimeout(function() { btn.classList.remove('error-state'); }, 2000);
-        showToast('error', 'Gagal Absen', error.message);
+        btn.classList.add('error-state'); setTimeout(function() { btn.classList.remove('error-state'); }, 2000);
+        showToast('error', 'Gagal Absen', result.error.message);
       }
     } else {
-      todayAttendance[courseName] = true;
-      renderCourses();
+      todayAttendance[courseName] = true; renderCourses();
       showToast('success', 'Absensi Berhasil', courseName + ' \u2014 hadir tercatat.');
       loadHistory();
     }
   }).catch(function() {
-    btn.innerHTML = originalText;
-    btn.classList.remove('loading');
+    btn.innerHTML = orig; btn.classList.remove('loading');
     showToast('error', 'Kesalahan', 'Gagal terhubung ke server.');
   });
 }
 
-// ── Load History ──
 function loadHistory() {
   var container = document.getElementById('historyList');
-
-  if (!isSupabaseReady) {
-    container.innerHTML = '<div class="history-empty">Database belum terhubung.</div>';
-    return;
-  }
-
-  supabase.from('attendance')
-    .select('*')
-    .order('created_at', { ascending: false })
-    .limit(20)
-    .then(function(result) {
-      var data = result.data;
-      var error = result.error;
-
-      if (error) {
-        container.innerHTML = '<div class="history-empty">Gagal memuat riwayat.</div>';
-        return;
+  if (!isSupabaseReady) { container.innerHTML = '<div class="history-empty">Database belum terhubung.</div>'; return; }
+  supabase.from('attendance').select('*').order('created_at', { ascending: false }).limit(20).then(function(result) {
+    if (result.error) { container.innerHTML = '<div class="history-empty">Gagal memuat riwayat.</div>'; return; }
+    if (!result.data || result.data.length === 0) { container.innerHTML = '<div class="history-empty">Belum ada riwayat absensi.</div>'; return; }
+    var todayStr = new Date().toISOString().slice(0, 10);
+    var needRerender = false;
+    for (var i = 0; i < result.data.length; i++) {
+      var rd = new Date(result.data[i].created_at).toISOString().slice(0, 10);
+      if (rd === todayStr && !todayAttendance[result.data[i].course_name]) {
+        todayAttendance[result.data[i].course_name] = true; needRerender = true;
       }
-
-      if (!data || data.length === 0) {
-        container.innerHTML = '<div class="history-empty">Belum ada riwayat absensi.</div>';
-        return;
-      }
-
-      // Tandai yang hari ini
-      var todayStr = new Date().toISOString().slice(0, 10);
-      var needRerender = false;
-      for (var i = 0; i < data.length; i++) {
-        var rowDate = new Date(data[i].created_at).toISOString().slice(0, 10);
-        if (rowDate === todayStr && !todayAttendance[data[i].course_name]) {
-          todayAttendance[data[i].course_name] = true;
-          needRerender = true;
-        }
-      }
-      if (needRerender) renderCourses();
-
-      // Render list
-      var html = '<div class="history-list">';
-      for (var i = 0; i < data.length; i++) {
-        var row = data[i];
-        var d = new Date(row.created_at);
-        var dateStr = d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
-        var timeStr = d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-        html += '<div class="history-item">' +
-          '<div><span class="h-course">' + row.course_name + '</span>' +
-          '<span class="h-date" style="margin-left:0.6rem">' + dateStr + ' ' + timeStr + '</span></div>' +
-          '<span class="h-status">' + row.status + '</span></div>';
-      }
-      html += '</div>';
-      container.innerHTML = html;
-    }).catch(function() {
-      container.innerHTML = '<div class="history-empty">Gagal memuat riwayat.</div>';
-    });
+    }
+    if (needRerender) renderCourses();
+    var html = '<div class="history-list">';
+    for (var i = 0; i < result.data.length; i++) {
+      var r = result.data[i]; var d = new Date(r.created_at);
+      html += '<div class="history-item"><div><span class="h-course">' + r.course_name + '</span><span class="h-date" style="margin-left:.6rem">' + d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) + ' ' + d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + '</span></div><span class="h-status">' + r.status + '</span></div>';
+    }
+    html += '</div>';
+    container.innerHTML = html;
+  }).catch(function() { container.innerHTML = '<div class="history-empty">Gagal memuat riwayat.</div>'; });
 }
 
-// ── Logout ──
 function handleLogout() {
   todayAttendance = {};
   document.getElementById('dashboard-section').classList.remove('active');
@@ -1071,21 +493,13 @@ function handleLogout() {
   switchTab('login');
   document.getElementById('login-form').reset();
   document.getElementById('signup-form').reset();
-
-  if (supabase) {
-    supabase.auth.signOut().catch(function() {});
-  }
+  if (supabase) { supabase.auth.signOut().catch(function() {}); }
 }
 
-// ── Session Recovery ──
 window.addEventListener('DOMContentLoaded', function() {
   if (!isSupabaseReady) return;
-
   supabase.auth.getSession().then(function(result) {
-    var session = result.data.session;
-    if (session && session.user) {
-      enterDashboard(session.user);
-    }
+    if (result.data.session && result.data.session.user) { enterDashboard(result.data.session.user); }
   }).catch(function() {});
 });
 </script>
