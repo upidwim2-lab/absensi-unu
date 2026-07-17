@@ -231,16 +231,14 @@ var COURSES = [
 ];
 
 var supabase = null;
-var isSupabaseReady = false;
 var todayAttendance = {};
 
 try {
-  if (typeof window.supabase !== 'undefined' && SUPABASE_URL.indexOf('PASTE_') === -1) {
+  if (typeof window.supabase !== 'undefined' && SUPABASE_URL && SUPABASE_KEY) {
     supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    isSupabaseReady = true;
   }
 } catch (err) {
-  console.error('Gagal inisialisasi Supabase:', err);
+  console.error('Supabase error:', err);
 }
 
 function showToast(type, title, message) {
@@ -289,12 +287,6 @@ function showError(id, msg) {
   var field = el ? el.parentElement : null;
   if (field) { var inp = field.querySelector('input'); if (inp) inp.classList.add('invalid'); }
 }
-function clearError(id) {
-  var el = document.getElementById(id);
-  if (el) { el.textContent = ''; el.classList.remove('show'); }
-  var field = el ? el.parentElement : null;
-  if (field) { var inp = field.querySelector('input'); if (inp) inp.classList.remove('invalid'); }
-}
 function clearAllErrors() {
   var errs = document.querySelectorAll('.field-error');
   for (var i = 0; i < errs.length; i++) { errs[i].textContent = ''; errs[i].classList.remove('show'); }
@@ -328,7 +320,7 @@ for (var i = 0; i < allInputs.length; i++) {
 function handleSignup(e) {
   e.preventDefault();
   clearAllErrors();
-  if (!isSupabaseReady) { showToast('warning', 'Belum Siap', 'Ganti SUPABASE_URL dan SUPABASE_KEY di kode HTML dengan kredensial Anda.'); return; }
+  if (!supabase) { showToast('error', 'Koneksi Gagal', 'Tidak dapat terhubung ke server.'); return; }
   var nama = document.getElementById('signup-nama').value.trim();
   var nim = document.getElementById('signup-nim').value.trim();
   var email = document.getElementById('signup-email').value.trim();
@@ -365,7 +357,7 @@ function handleSignup(e) {
 function handleLogin(e) {
   e.preventDefault();
   clearAllErrors();
-  if (!isSupabaseReady) { showToast('warning', 'Belum Siap', 'Ganti SUPABASE_URL dan SUPABASE_KEY di kode HTML dengan kredensial Anda.'); return; }
+  if (!supabase) { showToast('error', 'Koneksi Gagal', 'Tidak dapat terhubung ke server.'); return; }
   var email = document.getElementById('login-email').value.trim();
   var password = document.getElementById('login-password').value;
   var valid = true;
@@ -425,7 +417,7 @@ function renderCourses() {
 }
 
 function handleAbsen(btn, courseName) {
-  if (!isSupabaseReady || !supabase) { showToast('error', 'Gagal', 'Koneksi database belum siap.'); return; }
+  if (!supabase) { showToast('error', 'Koneksi Gagal', 'Tidak dapat terhubung ke server.'); return; }
   var orig = btn.innerHTML;
   btn.innerHTML = '<span style="display:inline-block;width:14px;height:14px;border:2px solid transparent;border-top-color:currentColor;border-radius:50%;animation:spin .6s linear infinite;"></span>';
   btn.classList.add('loading');
@@ -463,7 +455,7 @@ function handleAbsen(btn, courseName) {
 
 function loadHistory() {
   var container = document.getElementById('historyList');
-  if (!isSupabaseReady) { container.innerHTML = '<div class="history-empty">Database belum terhubung.</div>'; return; }
+  if (!supabase) { container.innerHTML = '<div class="history-empty">Tidak dapat terhubung ke server.</div>'; return; }
   supabase.from('attendance').select('*').order('created_at', { ascending: false }).limit(20).then(function(result) {
     if (result.error) { container.innerHTML = '<div class="history-empty">Gagal memuat riwayat.</div>'; return; }
     if (!result.data || result.data.length === 0) { container.innerHTML = '<div class="history-empty">Belum ada riwayat absensi.</div>'; return; }
@@ -497,7 +489,7 @@ function handleLogout() {
 }
 
 window.addEventListener('DOMContentLoaded', function() {
-  if (!isSupabaseReady) return;
+  if (!supabase) return;
   supabase.auth.getSession().then(function(result) {
     if (result.data.session && result.data.session.user) { enterDashboard(result.data.session.user); }
   }).catch(function() {});
