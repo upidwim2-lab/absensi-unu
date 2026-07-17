@@ -7,7 +7,7 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&family=Inter:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap">
-<script src="supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root {
   --forest-dark: #0d1310;
@@ -221,8 +221,12 @@ input.invalid{border-bottom-color:var(--red-accent)}
 </div>
 
 <script>
-var SUPABASE_URL = 'https://dvvqtaahugjwnsfdtyjf.supabase.co'.trim();
-var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2dnF0YWFodWdqd25zZmR0eWpmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQyODcyNTksImV4cCI6MjA5OTg2MzI1OX0.lqfBnvMlSvr43onR-PQZdTpCeSInWD6rvbHLZTJkvPA'.trim();
+/* =========================================================
+   WAJIB: Ganti tulisan PASTE_ di bawah ini dengan data asli
+   dari Supabase Dashboard > Settings > API
+   ========================================================= */
+var SUPABASE_URL = 'https://dvvqtaahugjwnsfdtyjf.supabase.co';
+var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2dnF0YWFodWdqd25zZmR0eWpmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQyODcyNTksImV4cCI6MjA5OTg2MzI1OX0.lqfBnvMlSvr43onR-PQZdTpCeSInWD6rvbHLZTJkvPA';
 
 var COURSES = [
   { name: 'Fiqih Muamalah',  time: '07:30 – 09:00', lecturer: 'Dr. H. Ahmad Fauzi, M.Ag' },
@@ -329,7 +333,7 @@ for (var i = 0; i < allInputs.length; i++) {
 function handleSignup(e) {
   e.preventDefault();
   clearAllErrors();
-  if (!supabase) { showToast('error', 'Koneksi Gagal', 'Tidak dapat terhubung ke server. Pastikan file supabase.js sudah diupload ke GitHub.'); return; }
+  if (!supabase) { showToast('error', 'Koneksi Gagal', 'Tidak dapat terhubung ke server.'); return; }
   var nama = document.getElementById('signup-nama').value.trim();
   var nim = document.getElementById('signup-nim').value.trim();
   var email = document.getElementById('signup-email').value.trim();
@@ -366,7 +370,7 @@ function handleSignup(e) {
 function handleLogin(e) {
   e.preventDefault();
   clearAllErrors();
-  if (!supabase) { showToast('error', 'Koneksi Gagal', 'Tidak dapat terhubung ke server. Pastikan file supabase.js sudah diupload ke GitHub.'); return; }
+  if (!supabase) { showToast('error', 'Koneksi Gagal', 'Tidak dapat terhubung ke server.'); return; }
   var email = document.getElementById('login-email').value.trim();
   var password = document.getElementById('login-password').value;
   var valid = true;
