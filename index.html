@@ -7,7 +7,12 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&family=Inter:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap">
+
+<!-- CDN Utama -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- FALLBACK: Kalau jsdelivr diblokir (misal WiFi kampus), pakai unpkg -->
+<script>if(typeof window.supabase==='undefined'){document.write('<script src="https://unpkg.com/@supabase/supabase-js@2"><\/script>');}</script>
+
 <style>
 :root {
   --forest-dark: #0d1310;
@@ -62,8 +67,6 @@ input{width:100%;background:transparent;border:none;border-bottom:1px solid rgba
 input::placeholder{color:rgba(255,255,255,.2)}
 input:focus{outline:none;border-bottom-color:var(--off-white)}
 input.invalid{border-bottom-color:var(--red-accent)}
-
-/* DIPERBAIKI: pakai display none, bukan opacity */
 .field-error{display:none;font-size:.75rem;color:var(--red-accent);min-height:0;line-height:1.4}
 .field-error.show{display:block}
 
@@ -223,8 +226,12 @@ input.invalid{border-bottom-color:var(--red-accent)}
 </div>
 
 <script>
-var SUPABASE_URL = 'https://supabase.co';
-var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2dnF0YWFodWdqd25zZmR0eWpmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQyODcyNTksImV4cCI6MjA5OTg2MzI1OX0.lqfBnvMlSvr43onR-PQZdTpCeSInWD6rvbHLZTJkvPA';
+/* ══════════════════════════════════════════
+   .trim() mencegah error jika ada spasi 
+   tersembunyi saat copy-paste
+   ══════════════════════════════════════════ */
+var SUPABASE_URL = 'https://dvvqtaahugjwnsfdtyjf.supabase.co'.trim();
+var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2dnF0YWFodWdqd25zZmR0eWpmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQyODcyNTksImV4cCI6MjA5OTg2MzI1OX0.lqfBnvMlSvr43onR-PQZdTpCeSInWD6rvbHLZTJkvPA'.trim();
 
 var COURSES = [
   { name: 'Fiqih Muamalah',  time: '07:30 – 09:00', lecturer: 'Dr. H. Ahmad Fauzi, M.Ag' },
@@ -235,6 +242,30 @@ var COURSES = [
 
 var supabase = null;
 var todayAttendance = {};
+
+/* ══════════════════════════════════════════
+   INISIALISASI LANGSUNG (bukan di onload)
+   Karena script di <head> sudah selesai
+   diparse sebelum kode ini dijalankan.
+   ══════════════════════════════════════════ */
+try {
+  if (typeof window.supabase !== 'undefined' && typeof window.supabase.createClient === 'function') {
+    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  } else {
+    console.error('Supabase JS gagal dimuat. Mungkin CDN diblokir oleh jaringan.');
+  }
+} catch (err) {
+  console.error('Gagal membuat klien Supabase. Cek URL dan Key:', err);
+}
+
+/* Cek session langsung di sini */
+if (supabase) {
+  supabase.auth.getSession().then(function(result) {
+    if (result.data.session && result.data.session.user) {
+      enterDashboard(result.data.session.user);
+    }
+  }).catch(function() {});
+}
 
 function showToast(type, title, message) {
   var container = document.getElementById('toastContainer');
@@ -315,7 +346,7 @@ for (var i = 0; i < allInputs.length; i++) {
 function handleSignup(e) {
   e.preventDefault();
   clearAllErrors();
-  if (!supabase) { showToast('error', 'Koneksi Gagal', 'CDN Supabase belum selesai dimuat. Tunggu sebentar lalu coba lagi.'); return; }
+  if (!supabase) { showToast('error', 'Koneksi Gagal', 'Tidak dapat terhubung ke server. Periksa koneksi internet Anda.'); return; }
   var nama = document.getElementById('signup-nama').value.trim();
   var nim = document.getElementById('signup-nim').value.trim();
   var email = document.getElementById('signup-email').value.trim();
@@ -352,7 +383,7 @@ function handleSignup(e) {
 function handleLogin(e) {
   e.preventDefault();
   clearAllErrors();
-  if (!supabase) { showToast('error', 'Koneksi Gagal', 'CDN Supabase belum selesai dimuat. Tunggu sebentar lalu coba lagi.'); return; }
+  if (!supabase) { showToast('error', 'Koneksi Gagal', 'Tidak dapat terhubung ke server. Periksa koneksi internet Anda.'); return; }
   var email = document.getElementById('login-email').value.trim();
   var password = document.getElementById('login-password').value;
   var valid = true;
@@ -412,7 +443,7 @@ function renderCourses() {
 }
 
 function handleAbsen(btn, courseName) {
-  if (!supabase) { showToast('error', 'Koneksi Gagal', 'CDN Supabase belum selesai dimuat.'); return; }
+  if (!supabase) { showToast('error', 'Koneksi Gagal', 'Tidak dapat terhubung ke server.'); return; }
   var orig = btn.innerHTML;
   btn.innerHTML = '<span style="display:inline-block;width:14px;height:14px;border:2px solid transparent;border-top-color:currentColor;border-radius:50%;animation:spin .6s linear infinite;"></span>';
   btn.classList.add('loading');
@@ -482,21 +513,6 @@ function handleLogout() {
   document.getElementById('signup-form').reset();
   if (supabase) { supabase.auth.signOut().catch(function() {}); }
 }
-
-window.onload = function() {
-  try {
-    if (typeof window.supabase !== 'undefined' && typeof window.supabase.createClient === 'function') {
-      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-      supabase.auth.getSession().then(function(result) {
-        if (result.data.session && result.data.session.user) {
-          enterDashboard(result.data.session.user);
-        }
-      }).catch(function() {});
-    }
-  } catch (err) {
-    console.error('Gagal inisialisasi Supabase:', err);
-  }
-};
 </script>
 </body>
 </html>
