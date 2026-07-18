@@ -104,7 +104,7 @@ input.invalid{border-bottom-color:var(--red-accent)}
       </form>
       <form id="signup-form" class="form-group" onsubmit="handleSignup(event)" novalidate>
         <div class="field"><label for="signup-nama">Nama Lengkap</label><div class="input-wrap"><input type="text" id="signup-nama" placeholder="Sesuai KTM" autocomplete="name"></div><div class="field-error" id="signup-nama-error"></div></div>
-        <div class="field"><label for="signup-nim">NIM</label><div class="input-wrap"><input type="text" id="signup-nim" placeholder="10 digit angka" inputmode="numeric" maxlength="10" autocomplete="off"></div><div class="field-error" id="signup-nim-error"></div></div>
+        <div class="field"><label for="signup-nim">NIM</label><div class="input-wrap"><input type="text" id="signup-nim" placeholder="Isi NIM Anda" inputmode="numeric" autocomplete="off"></div><div class="field-error" id="signup-nim-error"></div></div>
         <div class="field"><label for="signup-email">Email</label><div class="input-wrap"><input type="email" id="signup-email" placeholder="nama@kampus.ac.id" autocomplete="email"></div><div class="field-error" id="signup-email-error"></div></div>
         <div class="field"><label for="signup-password">Password (min. 6 karakter)</label><div class="input-wrap"><input type="password" id="signup-password" placeholder="Buat password" autocomplete="new-password"><button type="button" class="eye-btn" onclick="togglePass('signup-password', this)">&#128065;</button></div><div class="field-error" id="signup-password-error"></div></div>
         <button type="submit" class="submit-btn" id="signup-btn"><span class="spinner"></span><span class="btn-text">Daftar Sekarang</span></button>
@@ -119,7 +119,6 @@ input.invalid{border-bottom-color:var(--red-accent)}
     <div class="history-section"><h3 class="section-title" style="margin-top:2.5rem;">Riwayat Absensi</h3><div id="historyList"><div class="history-empty">Belum ada riwayat absensi.</div></div></div>
   </div>
 </div>
-
 <script>
 /* ══════════════════════════════════════════
    GANTI TULISAN PASTE_ DI BAWAH INI
@@ -191,9 +190,13 @@ function showError(id, msg) { var el = document.getElementById(id); if (el) { el
 function clearAllErrors() { var e = document.querySelectorAll('.field-error'); for (var i = 0; i < e.length; i++) { e[i].textContent = ''; e[i].classList.remove('show'); } var inv = document.querySelectorAll('input.invalid'); for (var i = 0; i < inv.length; i++) inv[i].classList.remove('invalid'); }
 function setLoading(id, l) { var b = document.getElementById(id); if (!b) return; if (l) { b.classList.add('loading'); b.disabled = true; } else { b.classList.remove('loading'); b.disabled = false; } }
 function validateEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
-function validateNIM(n) { return /^\d{10}$/.test(n); }
 
-document.getElementById('signup-nim').addEventListener('input', function() { this.value = this.value.replace(/\D/g, '').slice(0, 10); });
+/* NIM: Hanya wajib angka, tidak ada batasan panjang */
+function validateNIM(n) { return /^\d+$/.test(n); }
+
+/* Hanya izinkan angka saat mengetik NIM */
+document.getElementById('signup-nim').addEventListener('input', function() { this.value = this.value.replace(/\D/g, ''); });
+
 var allInputs = document.querySelectorAll('.field input');
 for (var i = 0; i < allInputs.length; i++) { (function(inp) { inp.addEventListener('input', function() { var f = inp.closest('.field'); if (f) f = f.querySelector('.field-error'); if (f && f.classList.contains('show')) { f.textContent = ''; f.classList.remove('show'); inp.classList.remove('invalid'); } }); })(allInputs[i]); }
 
@@ -206,7 +209,7 @@ function handleSignup(e) {
   var password = document.getElementById('signup-password').value;
   var valid = true;
   if (!nama) { showError('signup-nama-error', 'Nama lengkap wajib diisi.'); valid = false; }
-  if (!validateNIM(nim)) { showError('signup-nim-error', 'NIM harus tepat 10 digit angka.'); valid = false; }
+  if (!validateNIM(nim)) { showError('signup-nim-error', 'NIM hanya boleh berisi angka.'); valid = false; }
   if (!validateEmail(email)) { showError('signup-email-error', 'Format email tidak valid.'); valid = false; }
   if (password.length < 6) { showError('signup-password-error', 'Password minimal 6 karakter.'); valid = false; }
   if (!valid) return;
