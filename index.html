@@ -7,7 +7,6 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&family=Inter:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root {
   --forest-dark: #0d1310;
@@ -221,10 +220,9 @@ input.invalid{border-bottom-color:var(--red-accent)}
 </div>
 
 <script>
-/* =========================================================
-   WAJIB: Ganti tulisan PASTE_ di bawah ini dengan data asli
-   dari Supabase Dashboard > Settings > API
-   ========================================================= */
+/* ══════════════════════════════════════════
+   GANTI TULISAN PASTE_ DI BAWAH INI
+   ══════════════════════════════════════════ */
 var SUPABASE_URL = 'https://dvvqtaahugjwnsfdtyjf.supabase.co';
 var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2dnF0YWFodWdqd25zZmR0eWpmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQyODcyNTksImV4cCI6MjA5OTg2MzI1OX0.lqfBnvMlSvr43onR-PQZdTpCeSInWD6rvbHLZTJkvPA';
 
@@ -235,24 +233,109 @@ var COURSES = [
   { name: 'Aqidah Akhlak',   time: '13:30 – 15:00', lecturer: 'Dr. H. Nuruddin, M.Si' }
 ];
 
-var supabase = null;
 var todayAttendance = {};
 
-try {
-  if (typeof window.supabase !== 'undefined' && typeof window.supabase.createClient === 'function') {
-    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-  }
-} catch (err) {
-  console.error('Gagal inisialisasi Supabase:', err);
-}
+/* ══════════════════════════════════════════
+   KONEKSI LANGSUNG (TANPA CDN/DOWNLOAD FILE)
+   ══════════════════════════════════════════ */
+var SB = {
+  url: SUPABASE_URL,
+  key: SUPABASE_KEY,
+  token: localStorage.getItem('sb_unu_token') || null,
 
-if (supabase) {
-  supabase.auth.getSession().then(function(result) {
-    if (result.data.session && result.data.session.user) {
-      enterDashboard(result.data.session.user);
+  signUp: function(email, password, metadata) {
+    return fetch(this.url + '/auth/v1/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'apikey': this.key },
+      body: JSON.stringify({ email: email, password: password, data: metadata })
+    }).then(function(r) { return r.json(); }).then(function(data) {
+      if (data.error) return { data: null, error: data };
+      if (data.msg) return { data: null, error: { message: data.msg } };
+      return { data: data, error: null };
+    });
+  },
+
+  signIn: function(email, password) {
+    return fetch(this.url + '/auth/v1/token?grant_type=password', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'apikey': this.key },
+      body: JSON.stringify({ email: email, password: password })
+    }).then(function(r) { return r.json(); }).then(function(data) {
+      if (data.access_token) {
+        SB.token = data.access_token;
+        localStorage.setItem('sb_unu_token', data.access_token);
+        return { data: { user: data.user }, error: null };
+      }
+      if (data.error) return { data: null, error: data };
+      return { data: null, error: { message: data.msg || 'Gagal masuk' } };
+    });
+  },
+
+  getUser: function() {
+    if (!this.token) return Promise.resolve({ data: { user: null } });
+    return fetch(this.url + '/auth/v1/user', {
+      headers: { 'apikey': this.key, 'Authorization': 'Bearer ' + this.token }
+    }).then(function(r) { return r.json(); }).then(function(data) {
+      if (data.id) return { data: { user: data } };
+      SB.token = null;
+      localStorage.removeItem('sb_unu_token');
+      return { data: { user: null } };
+    });
+  },
+
+  signOut: function() {
+    var tkn = this.token;
+    this.token = null;
+    localStorage.removeItem('sb_unu_token');
+    if (tkn) {
+      return fetch(this.url + '/auth/v1/logout', {
+        method: 'POST',
+        headers: { 'apikey': this.key, 'Authorization': 'Bearer ' + tkn }
+      }).catch(function() {});
     }
-  }).catch(function() {});
-}
+    return Promise.resolve();
+  },
+
+  from: function(table) {
+    return {
+      select: function(cols) {
+        return {
+          order: function(col, dir) {
+            return {
+              limit: function(n) {
+                return fetch(SB.url + '/rest/v1/' + table + '?select=' + cols + '&order=' + col + '.' + dir + '&limit=' + n, {
+                  headers: { 'apikey': SB.key, 'Authorization': 'Bearer ' + (SB.token || ''), 'Content-Type': 'application/json' }
+                }).then(function(r) { return r.json(); });
+              }
+            };
+          },
+          single: function() {
+            return fetch(SB.url + '/rest/v1/' + table + '?select=' + cols + '&limit=1', {
+              headers: { 'apikey': SB.key, 'Authorization': 'Bearer ' + (SB.token || ''), 'Content-Type': 'application/json' }
+            }).then(function(r) { return r.json(); }).then(function(data) {
+              return { data: (data && data.length > 0) ? data[0] : null, error: (data.msg || data.code) ? { msg: data.msg, code: data.code } : null };
+            });
+          }
+        };
+      },
+      insert: function(rows) {
+        return fetch(SB.url + '/rest/v1/' + table, {
+          method: 'POST',
+          headers: { 'apikey': SB.key, 'Authorization': 'Bearer ' + (SB.token || ''), 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+          body: JSON.stringify(rows)
+        }).then(function(r) {
+          if (r.status === 201) return { data: rows, error: null };
+          return r.json().then(function(err) { return { data: null, error: err }; }).catch(function() { return { data: null, error: { msg: 'Gagal menyimpan' } }; });
+        });
+      }
+    };
+  }
+};
+
+/* Cek session tersimpan */
+SB.getUser().then(function(result) {
+  if (result.data.user) { enterDashboard(result.data.user); }
+});
 
 function showToast(type, title, message) {
   var container = document.getElementById('toastContainer');
@@ -285,13 +368,8 @@ function switchTab(tab) {
 function togglePass(inputId, btn) {
   var input = document.getElementById(inputId);
   if (!input) return;
-  if (input.type === 'password') {
-    input.type = 'text';
-    btn.innerHTML = '&#128374;';
-  } else {
-    input.type = 'password';
-    btn.innerHTML = '&#128065;';
-  }
+  if (input.type === 'password') { input.type = 'text'; btn.innerHTML = '&#128374;'; }
+  else { input.type = 'password'; btn.innerHTML = '&#128065;'; }
 }
 
 function showError(id, msg) {
@@ -318,7 +396,6 @@ function validateNIM(n) { return /^\d{10}$/.test(n); }
 document.getElementById('signup-nim').addEventListener('input', function() {
   this.value = this.value.replace(/\D/g, '').slice(0, 10);
 });
-
 var allInputs = document.querySelectorAll('.field input');
 for (var i = 0; i < allInputs.length; i++) {
   (function(inp) {
@@ -331,9 +408,7 @@ for (var i = 0; i < allInputs.length; i++) {
 }
 
 function handleSignup(e) {
-  e.preventDefault();
-  clearAllErrors();
-  if (!supabase) { showToast('error', 'Koneksi Gagal', 'Tidak dapat terhubung ke server.'); return; }
+  e.preventDefault(); clearAllErrors();
   var nama = document.getElementById('signup-nama').value.trim();
   var nim = document.getElementById('signup-nim').value.trim();
   var email = document.getElementById('signup-email').value.trim();
@@ -345,32 +420,22 @@ function handleSignup(e) {
   if (password.length < 6) { showError('signup-password-error', 'Password minimal 6 karakter.'); valid = false; }
   if (!valid) return;
   setLoading('signup-btn', true);
-  supabase.auth.signUp({
-    email: email, password: password,
-    options: { data: { nama: nama, nim: nim } }
-  }).then(function(result) {
+  SB.signUp(email, password, { nama: nama, nim: nim }).then(function(result) {
     setLoading('signup-btn', false);
     if (result.error) {
-      if (result.error.message.indexOf('already registered') !== -1) {
-        showError('signup-email-error', 'Email ini sudah terdaftar.');
-      } else {
-        showToast('error', 'Gagal Daftar', result.error.message);
-      }
+      var errStr = (result.error.error_description || result.error.message || result.error.msg || '');
+      if (errStr.indexOf('already registered') !== -1) { showError('signup-email-error', 'Email ini sudah terdaftar.'); }
+      else { showToast('error', 'Gagal Daftar', errStr); }
     } else {
       showToast('success', 'Berhasil Daftar', 'Silakan masuk dengan akun Anda.');
       document.getElementById('signup-form').reset();
       switchTab('login');
     }
-  }).catch(function() {
-    setLoading('signup-btn', false);
-    showToast('error', 'Kesalahan', 'Terjadi error tidak terduga.');
-  });
+  }).catch(function() { setLoading('signup-btn', false); showToast('error', 'Kesalahan', 'Terjadi error tidak terduga.'); });
 }
 
 function handleLogin(e) {
-  e.preventDefault();
-  clearAllErrors();
-  if (!supabase) { showToast('error', 'Koneksi Gagal', 'Tidak dapat terhubung ke server.'); return; }
+  e.preventDefault(); clearAllErrors();
   var email = document.getElementById('login-email').value.trim();
   var password = document.getElementById('login-password').value;
   var valid = true;
@@ -378,23 +443,15 @@ function handleLogin(e) {
   if (password.length < 6) { showError('login-password-error', 'Password minimal 6 karakter.'); valid = false; }
   if (!valid) return;
   setLoading('login-btn', true);
-  supabase.auth.signInWithPassword({ email: email, password: password }).then(function(result) {
+  SB.signIn(email, password).then(function(result) {
     setLoading('login-btn', false);
     if (result.error) {
-      if (result.error.message.indexOf('Invalid') !== -1) {
-        showError('login-password-error', 'Email atau password salah.');
-      } else if (result.error.message.indexOf('Email not confirmed') !== -1) {
-        showError('login-email-error', 'Akun belum diverifikasi. Cek email Anda.');
-      } else {
-        showToast('error', 'Gagal Masuk', result.error.message);
-      }
-    } else {
-      enterDashboard(result.data.user);
-    }
-  }).catch(function() {
-    setLoading('login-btn', false);
-    showToast('error', 'Kesalahan', 'Terjadi error tidak terduga.');
-  });
+      var errStr = (result.error.error_description || result.error.message || '');
+      if (errStr.indexOf('Invalid') !== -1) { showError('login-password-error', 'Email atau password salah.'); }
+      else if (errStr.indexOf('not confirmed') !== -1) { showError('login-email-error', 'Akun belum diverifikasi. Cek email Anda.'); }
+      else { showToast('error', 'Gagal Masuk', errStr); }
+    } else { enterDashboard(result.data.user); }
+  }).catch(function() { setLoading('login-btn', false); showToast('error', 'Kesalahan', 'Terjadi error tidak terduga.'); });
 }
 
 function enterDashboard(user) {
@@ -404,80 +461,61 @@ function enterDashboard(user) {
   document.getElementById('user-nim').textContent = 'NIM: ' + nim;
   var now = new Date();
   document.getElementById('dateBadge').textContent = now.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-  renderCourses();
-  loadHistory();
+  renderCourses(); loadHistory();
   document.getElementById('auth-section').style.display = 'none';
   document.getElementById('dashboard-section').classList.add('active');
 }
 
 function renderCourses() {
-  var container = document.getElementById('courseList');
-  container.innerHTML = '';
+  var container = document.getElementById('courseList'); container.innerHTML = '';
   for (var i = 0; i < COURSES.length; i++) {
-    var c = COURSES[i];
-    var done = todayAttendance[c.name];
-    var card = document.createElement('div');
-    card.className = 'card';
-    var btn;
-    if (done) {
-      btn = '<button class="absen-btn done" disabled>\u2713 Tercatat</button>';
-    } else {
-      btn = '<button class="absen-btn" onclick="handleAbsen(this,\'' + c.name.replace(/'/g, "\\'") + '\')">Tandai Hadir</button>';
-    }
+    var c = COURSES[i]; var done = todayAttendance[c.name];
+    var card = document.createElement('div'); card.className = 'card';
+    var btn = done ? '<button class="absen-btn done" disabled>\u2713 Tercatat</button>' : '<button class="absen-btn" onclick="handleAbsen(this,\'' + c.name.replace(/'/g, "\\'") + '\')">Tandai Hadir</button>';
     card.innerHTML = '<div class="card-info"><h3>' + c.name + '</h3><p>' + c.time + ' | ' + c.lecturer + '</p></div>' + btn;
     container.appendChild(card);
   }
 }
 
 function handleAbsen(btn, courseName) {
-  if (!supabase) { showToast('error', 'Koneksi Gagal', 'Tidak dapat terhubung ke server.'); return; }
   var orig = btn.innerHTML;
   btn.innerHTML = '<span style="display:inline-block;width:14px;height:14px;border:2px solid transparent;border-top-color:currentColor;border-radius:50%;animation:spin .6s linear infinite;"></span>';
   btn.classList.add('loading');
-  Promise.all([
-    supabase.auth.getUser(),
-    supabase.from('profiles').select('nim').single()
-  ]).then(function(res) {
+  Promise.all([SB.getUser(), SB.from('profiles').select('nim').single()]).then(function(res) {
     var user = res[0].data.user;
     if (!user) { btn.innerHTML = orig; btn.classList.remove('loading'); showToast('error', 'Sesi Habis', 'Silakan masuk kembali.'); handleLogout(); return; }
     var nama = (user.user_metadata && user.user_metadata.nama) ? user.user_metadata.nama : 'Mahasiswa';
     var nim = (res[1].data && res[1].data.nim) ? res[1].data.nim : '';
-    return supabase.from('attendance').insert([{ user_id: user.id, student_name: nama, nim: nim, course_name: courseName, status: 'hadir' }]);
+    return SB.from('attendance').insert([{ user_id: user.id, student_name: nama, nim: nim, course_name: courseName, status: 'hadir' }]);
   }).then(function(result) {
     if (!result) return;
     if (result.error) {
       btn.innerHTML = orig; btn.classList.remove('loading');
-      if (result.error.code === '23505' || result.error.message.indexOf('duplicate') !== -1 || result.error.message.indexOf('unique') !== -1) {
+      var errMsg = (result.error.msg || result.error.message || '');
+      if (result.error.code === '23505' || errMsg.indexOf('duplicate') !== -1 || errMsg.indexOf('unique') !== -1) {
         todayAttendance[courseName] = true; renderCourses();
         showToast('warning', 'Sudah Tercatat', 'Anda sudah absen ' + courseName + ' hari ini.');
       } else {
         btn.classList.add('error-state'); setTimeout(function() { btn.classList.remove('error-state'); }, 2000);
-        showToast('error', 'Gagal Absen', result.error.message);
+        showToast('error', 'Gagal Absen', errMsg);
       }
     } else {
       todayAttendance[courseName] = true; renderCourses();
       showToast('success', 'Absensi Berhasil', courseName + ' \u2014 hadir tercatat.');
       loadHistory();
     }
-  }).catch(function() {
-    btn.innerHTML = orig; btn.classList.remove('loading');
-    showToast('error', 'Kesalahan', 'Gagal terhubung ke server.');
-  });
+  }).catch(function() { btn.innerHTML = orig; btn.classList.remove('loading'); showToast('error', 'Kesalahan', 'Gagal terhubung ke server.'); });
 }
 
 function loadHistory() {
   var container = document.getElementById('historyList');
-  if (!supabase) { container.innerHTML = '<div class="history-empty">Tidak dapat terhubung.</div>'; return; }
-  supabase.from('attendance').select('*').order('created_at', { ascending: false }).limit(20).then(function(result) {
+  SB.from('attendance').select('*').order('created_at', { ascending: false }).limit(20).then(function(result) {
     if (result.error) { container.innerHTML = '<div class="history-empty">Gagal memuat riwayat.</div>'; return; }
     if (!result.data || result.data.length === 0) { container.innerHTML = '<div class="history-empty">Belum ada riwayat absensi.</div>'; return; }
-    var todayStr = new Date().toISOString().slice(0, 10);
-    var needRerender = false;
+    var todayStr = new Date().toISOString().slice(0, 10); var needRerender = false;
     for (var i = 0; i < result.data.length; i++) {
       var rd = new Date(result.data[i].created_at).toISOString().slice(0, 10);
-      if (rd === todayStr && !todayAttendance[result.data[i].course_name]) {
-        todayAttendance[result.data[i].course_name] = true; needRerender = true;
-      }
+      if (rd === todayStr && !todayAttendance[result.data[i].course_name]) { todayAttendance[result.data[i].course_name] = true; needRerender = true; }
     }
     if (needRerender) renderCourses();
     var html = '<div class="history-list">';
@@ -485,8 +523,7 @@ function loadHistory() {
       var r = result.data[i]; var d = new Date(r.created_at);
       html += '<div class="history-item"><div><span class="h-course">' + r.course_name + '</span><span class="h-date" style="margin-left:.6rem">' + d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) + ' ' + d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + '</span></div><span class="h-status">' + r.status + '</span></div>';
     }
-    html += '</div>';
-    container.innerHTML = html;
+    html += '</div>'; container.innerHTML = html;
   }).catch(function() { container.innerHTML = '<div class="history-empty">Gagal memuat riwayat.</div>'; });
 }
 
@@ -497,7 +534,7 @@ function handleLogout() {
   switchTab('login');
   document.getElementById('login-form').reset();
   document.getElementById('signup-form').reset();
-  if (supabase) { supabase.auth.signOut().catch(function() {}); }
+  SB.signOut();
 }
 </script>
 </body>
