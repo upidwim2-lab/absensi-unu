@@ -8,52 +8,37 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&family=Inter:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap">
 <style>
-:root {
-  --forest-dark: #0d1310;
-  --forest-mid: #1a2420;
-  --off-white: #f4f4f4;
-  --green-accent: #4ade80;
-  --green-dim: rgba(74,222,128,0.15);
-  --red-accent: #f87171;
-  --red-dim: rgba(248,113,113,0.15);
-  --yellow-accent: #fbbf24;
-  --yellow-dim: rgba(251,191,36,0.15);
-}
+:root{--forest-dark:#0d1310;--forest-mid:#1a2420;--off-white:#f4f4f4;--green-accent:#4ade80;--green-dim:rgba(74,222,128,.15);--red-accent:#f87171;--red-dim:rgba(248,113,113,.15);--yellow-accent:#fbbf24;--yellow-dim:rgba(251,191,36,.15)}
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Inter',sans-serif;background:var(--forest-dark);color:var(--off-white);line-height:1.7;min-height:100vh;overflow-x:hidden}
-
 .toast-container{position:fixed;top:1.5rem;right:1.5rem;z-index:9999;display:flex;flex-direction:column;gap:.75rem;pointer-events:none}
 .toast{pointer-events:auto;background:var(--forest-mid);border:1px solid rgba(255,255,255,.1);color:var(--off-white);padding:.9rem 1.4rem;border-radius:10px;font-size:.85rem;max-width:380px;box-shadow:0 10px 40px rgba(0,0,0,.5);display:flex;align-items:flex-start;gap:.7rem;animation:toastIn .35s ease-out;border-left:3px solid rgba(255,255,255,.2)}
-.toast.success{border-left-color:var(--green-accent)}
 .toast.error{border-left-color:var(--red-accent)}
+.toast.success{border-left-color:var(--green-accent)}
 .toast.warning{border-left-color:var(--yellow-accent)}
 .toast-icon{flex-shrink:0;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;margin-top:1px}
-.toast.success .toast-icon{background:var(--green-dim);color:var(--green-accent)}
 .toast.error .toast-icon{background:var(--red-dim);color:var(--red-accent)}
+.toast.success .toast-icon{background:var(--green-dim);color:var(--green-accent)}
 .toast.warning .toast-icon{background:var(--yellow-dim);color:var(--yellow-accent)}
 .toast-text{flex:1}
 .toast-text strong{display:block;font-weight:600;margin-bottom:2px}
-.toast-text span{opacity:.75;font-size:.8rem}
+.toast-text span{opacity:.75;font-size:.8rem;word-break:break-all}
 .toast.leaving{animation:toastOut .3s ease-in forwards}
 @keyframes toastIn{from{opacity:0;transform:translateX(60px) scale(.95)}to{opacity:1;transform:translateX(0) scale(1)}}
 @keyframes toastOut{from{opacity:1;transform:translateX(0) scale(1)}to{opacity:0;transform:translateX(60px) scale(.9)}}
-
 .container{max-width:1000px;margin:0 auto;padding:0 1.5rem}
 .section{padding:4rem 0}
 .header{padding:3.5rem 0 2rem;text-align:center;background:var(--forest-mid);border-bottom:1px solid rgba(255,255,255,.06)}
-.header h1{font-family:'EB Garamond',serif;font-size:2.4rem;font-weight:500;letter-spacing:-.01em}
-.header p{opacity:.5;font-size:.85rem;margin-top:.3rem;font-family:'Fira Code',monospace;letter-spacing:.04em}
-
+.header h1{font-family:'EB Garamond',serif;font-size:2.4rem;font-weight:500}
+.header p{opacity:.5;font-size:.85rem;margin-top:.3rem;font-family:'Fira Code',monospace}
 .auth-box{max-width:440px;margin:2.5rem auto;background:var(--forest-mid);padding:2.2rem;border-radius:14px;border:1px solid rgba(255,255,255,.08);box-shadow:0 20px 60px rgba(0,0,0,.3)}
 .tabs{display:flex;gap:4px;margin-bottom:2rem;background:rgba(255,255,255,.04);padding:4px;border-radius:10px}
-.tab-btn{flex:1;background:none;border:none;color:var(--off-white);padding:.75rem 0;font-family:'Inter',sans-serif;font-size:.9rem;font-weight:500;cursor:pointer;opacity:.4;border-radius:7px;transition:all .3s ease}
+.tab-btn{flex:1;background:none;border:none;color:var(--off-white);padding:.75rem 0;font-family:'Inter',sans-serif;font-size:.9rem;font-weight:500;cursor:pointer;opacity:.4;border-radius:7px;transition:all .3s}
 .tab-btn:hover{opacity:.65}
 .tab-btn.active{opacity:1;background:var(--forest-dark);box-shadow:0 2px 8px rgba(0,0,0,.3)}
-
 .form-group{display:none;flex-direction:column;gap:1.1rem}
 .form-group.active{display:flex;animation:fadeUp .3s ease-out}
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-
 .field{display:flex;flex-direction:column;gap:.35rem}
 label{font-family:'Fira Code',monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;opacity:.5}
 .input-wrap{position:relative}
@@ -63,42 +48,35 @@ input:focus{outline:none;border-bottom-color:var(--off-white)}
 input.invalid{border-bottom-color:var(--red-accent)}
 .field-error{display:none;font-size:.75rem;color:var(--red-accent);min-height:0;line-height:1.4}
 .field-error.show{display:block}
-
-.eye-btn{position:absolute;right:0;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--off-white);cursor:pointer;font-size:1.1rem;opacity:.4;transition:opacity .2s;padding:4px 6px;line-height:1}
+.eye-btn{position:absolute;right:0;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--off-white);cursor:pointer;font-size:1.1rem;opacity:.4;transition:opacity .2s;padding:4px 6px}
 .eye-btn:hover{opacity:.8}
-
 .submit-btn{width:100%;padding:.95rem;background:var(--off-white);color:var(--forest-dark);border:none;border-radius:999px;font-size:.9rem;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;margin-top:.6rem;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:.5rem;min-height:48px}
-.submit-btn:hover{background:#fff;transform:translateY(-1px);box-shadow:0 4px 15px rgba(255,255,255,.1)}
-.submit-btn:active{transform:translateY(0)}
-.submit-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+.submit-btn:hover{background:#fff;transform:translateY(-1px)}
+.submit-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
 .spinner{width:18px;height:18px;border:2px solid transparent;border-top-color:var(--forest-dark);border-radius:50%;animation:spin .6s linear infinite;display:none}
 .submit-btn.loading .spinner{display:block}
 .submit-btn.loading .btn-text{opacity:.6}
 @keyframes spin{to{transform:rotate(360deg)}}
-
 .dashboard{display:none;padding:3rem 0 5rem}
 .dashboard.active{display:block;animation:fadeUp .4s ease-out}
 .topbar{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,.08);padding-bottom:1.2rem;margin-bottom:2.5rem;flex-wrap:wrap;gap:1rem}
 .user-info h2{font-family:'EB Garamond',serif;font-weight:500;font-size:1.7rem}
 .user-info p{font-family:'Fira Code',monospace;font-size:.78rem;opacity:.45;margin-top:.15rem}
-.logout-btn{background:none;border:1px solid rgba(255,255,255,.2);color:var(--off-white);padding:.5rem 1.2rem;border-radius:999px;cursor:pointer;font-family:'Inter',sans-serif;font-size:.82rem;transition:all .2s}
-.logout-btn:hover{border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.05)}
+.logout-btn{background:none;border:1px solid rgba(255,255,255,.2);color:var(--off-white);padding:.5rem 1.2rem;border-radius:999px;cursor:pointer;font-family:'Inter',sans-serif;font-size:.82rem}
+.logout-btn:hover{border-color:rgba(255,255,255,.5)}
 .section-title{font-family:'EB Garamond',serif;font-size:1.4rem;font-weight:400;margin-bottom:1.2rem;opacity:.9}
 .date-badge{display:inline-flex;align-items:center;gap:.5rem;background:var(--forest-mid);border:1px solid rgba(255,255,255,.08);padding:.5rem 1rem;border-radius:999px;font-family:'Fira Code',monospace;font-size:.75rem;opacity:.7;margin-bottom:1.5rem}
 .date-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green-accent);animation:pulse 2s ease-in-out infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-
-.card{background:var(--forest-mid);padding:1.3rem 1.5rem;border-radius:12px;margin-bottom:.75rem;display:flex;justify-content:space-between;align-items:center;border:1px solid rgba(255,255,255,.06);transition:border-color .2s,box-shadow .2s;flex-wrap:wrap;gap:1rem}
-.card:hover{border-color:rgba(255,255,255,.12);box-shadow:0 4px 20px rgba(0,0,0,.2)}
+.card{background:var(--forest-mid);padding:1.3rem 1.5rem;border-radius:12px;margin-bottom:.75rem;display:flex;justify-content:space-between;align-items:center;border:1px solid rgba(255,255,255,.06);flex-wrap:wrap;gap:1rem}
+.card:hover{border-color:rgba(255,255,255,.12)}
 .card-info h3{font-family:'EB Garamond',serif;font-size:1.15rem;font-weight:500}
 .card-info p{font-size:.8rem;opacity:.5;margin-top:.2rem}
-.absen-btn{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.2);color:var(--off-white);padding:.55rem 1.1rem;border-radius:999px;cursor:pointer;font-family:'Inter',sans-serif;font-size:.8rem;font-weight:500;transition:all .25s;white-space:nowrap;display:inline-flex;align-items:center;gap:.4rem;min-height:38px}
-.absen-btn:hover:not(:disabled){background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.35);transform:translateY(-1px)}
+.absen-btn{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.2);color:var(--off-white);padding:.55rem 1.1rem;border-radius:999px;cursor:pointer;font-family:'Inter',sans-serif;font-size:.8rem;font-weight:500;white-space:nowrap;display:inline-flex;align-items:center;gap:.4rem;min-height:38px}
+.absen-btn:hover:not(:disabled){background:rgba(255,255,255,.12);transform:translateY(-1px)}
 .absen-btn:disabled{cursor:not-allowed}
 .absen-btn.loading{opacity:.6;pointer-events:none}
 .absen-btn.done{background:var(--green-dim);border-color:rgba(74,222,128,.3);color:var(--green-accent);cursor:default}
-.absen-btn.error-state{background:var(--red-dim);border-color:rgba(248,113,113,.3);color:var(--red-accent)}
-
 .history-section{margin-top:3rem}
 .history-empty{text-align:center;padding:3rem 1rem;opacity:.3;font-size:.9rem}
 .history-list{display:flex;flex-direction:column;gap:.5rem}
@@ -106,117 +84,40 @@ input.invalid{border-bottom-color:var(--red-accent)}
 .history-item .h-course{font-weight:500}
 .history-item .h-date{font-family:'Fira Code',monospace;font-size:.72rem;opacity:.4}
 .history-item .h-status{font-family:'Fira Code',monospace;font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--green-accent);background:var(--green-dim);padding:.2rem .6rem;border-radius:999px}
-
-@media(max-width:600px){
-  .header h1{font-size:1.8rem}
-  .auth-box{padding:1.5rem;margin:1.5rem auto}
-  .topbar{flex-direction:column;align-items:flex-start}
-  .card{flex-direction:column;align-items:flex-start}
-  .absen-btn{align-self:flex-end}
-  .toast{max-width:calc(100vw - 3rem)}
-  .toast-container{right:1rem;left:1rem}
-}
+@media(max-width:600px){.header h1{font-size:1.8rem}.auth-box{padding:1.5rem;margin:1.5rem auto}.topbar{flex-direction:column;align-items:flex-start}.card{flex-direction:column;align-items:flex-start}.absen-btn{align-self:flex-end}.toast{max-width:calc(100vw - 3rem)}.toast-container{right:1rem;left:1rem}}
 </style>
 </head>
 <body>
-
 <div class="toast-container" id="toastContainer"></div>
-
-<header class="header">
-  <div class="container">
-    <h1>Absensi UNU Al-Ghozali</h1>
-    <p>SIAKAD // Sistem Informasi Akademik</p>
-  </div>
-</header>
-
+<header class="header"><div class="container"><h1>Absensi UNU Al-Ghozali</h1><p>SIAKAD // Sistem Informasi Akademik</p></div></header>
 <div class="container">
-
   <div id="auth-section" class="section">
     <div class="auth-box">
       <div class="tabs">
         <button type="button" class="tab-btn active" onclick="switchTab('login')">Masuk</button>
         <button type="button" class="tab-btn" onclick="switchTab('signup')">Daftar Akun</button>
       </div>
-
       <form id="login-form" class="form-group active" onsubmit="handleLogin(event)" novalidate>
-        <div class="field">
-          <label for="login-email">Email</label>
-          <div class="input-wrap">
-            <input type="email" id="login-email" placeholder="nama@kampus.ac.id" autocomplete="email">
-          </div>
-          <div class="field-error" id="login-email-error"></div>
-        </div>
-        <div class="field">
-          <label for="login-password">Password</label>
-          <div class="input-wrap">
-            <input type="password" id="login-password" placeholder="Min. 6 karakter" autocomplete="current-password">
-            <button type="button" class="eye-btn" onclick="togglePass('login-password', this)">&#128065;</button>
-          </div>
-          <div class="field-error" id="login-password-error"></div>
-        </div>
-        <button type="submit" class="submit-btn" id="login-btn">
-          <span class="spinner"></span>
-          <span class="btn-text">Masuk</span>
-        </button>
+        <div class="field"><label for="login-email">Email</label><div class="input-wrap"><input type="email" id="login-email" placeholder="nama@kampus.ac.id" autocomplete="email"></div><div class="field-error" id="login-email-error"></div></div>
+        <div class="field"><label for="login-password">Password</label><div class="input-wrap"><input type="password" id="login-password" placeholder="Min. 6 karakter" autocomplete="current-password"><button type="button" class="eye-btn" onclick="togglePass('login-password', this)">&#128065;</button></div><div class="field-error" id="login-password-error"></div></div>
+        <button type="submit" class="submit-btn" id="login-btn"><span class="spinner"></span><span class="btn-text">Masuk</span></button>
       </form>
-
       <form id="signup-form" class="form-group" onsubmit="handleSignup(event)" novalidate>
-        <div class="field">
-          <label for="signup-nama">Nama Lengkap</label>
-          <div class="input-wrap">
-            <input type="text" id="signup-nama" placeholder="Sesuai KTM" autocomplete="name">
-          </div>
-          <div class="field-error" id="signup-nama-error"></div>
-        </div>
-        <div class="field">
-          <label for="signup-nim">NIM</label>
-          <div class="input-wrap">
-            <input type="text" id="signup-nim" placeholder="10 digit angka" inputmode="numeric" maxlength="10" autocomplete="off">
-          </div>
-          <div class="field-error" id="signup-nim-error"></div>
-        </div>
-        <div class="field">
-          <label for="signup-email">Email</label>
-          <div class="input-wrap">
-            <input type="email" id="signup-email" placeholder="nama@kampus.ac.id" autocomplete="email">
-          </div>
-          <div class="field-error" id="signup-email-error"></div>
-        </div>
-        <div class="field">
-          <label for="signup-password">Password (min. 6 karakter)</label>
-          <div class="input-wrap">
-            <input type="password" id="signup-password" placeholder="Buat password" autocomplete="new-password">
-            <button type="button" class="eye-btn" onclick="togglePass('signup-password', this)">&#128065;</button>
-          </div>
-          <div class="field-error" id="signup-password-error"></div>
-        </div>
-        <button type="submit" class="submit-btn" id="signup-btn">
-          <span class="spinner"></span>
-          <span class="btn-text">Daftar Sekarang</span>
-        </button>
+        <div class="field"><label for="signup-nama">Nama Lengkap</label><div class="input-wrap"><input type="text" id="signup-nama" placeholder="Sesuai KTM" autocomplete="name"></div><div class="field-error" id="signup-nama-error"></div></div>
+        <div class="field"><label for="signup-nim">NIM</label><div class="input-wrap"><input type="text" id="signup-nim" placeholder="10 digit angka" inputmode="numeric" maxlength="10" autocomplete="off"></div><div class="field-error" id="signup-nim-error"></div></div>
+        <div class="field"><label for="signup-email">Email</label><div class="input-wrap"><input type="email" id="signup-email" placeholder="nama@kampus.ac.id" autocomplete="email"></div><div class="field-error" id="signup-email-error"></div></div>
+        <div class="field"><label for="signup-password">Password (min. 6 karakter)</label><div class="input-wrap"><input type="password" id="signup-password" placeholder="Buat password" autocomplete="new-password"><button type="button" class="eye-btn" onclick="togglePass('signup-password', this)">&#128065;</button></div><div class="field-error" id="signup-password-error"></div></div>
+        <button type="submit" class="submit-btn" id="signup-btn"><span class="spinner"></span><span class="btn-text">Daftar Sekarang</span></button>
       </form>
     </div>
   </div>
-
   <div id="dashboard-section" class="dashboard">
-    <div class="topbar">
-      <div class="user-info">
-        <h2 id="user-greeting">Halo, Mahasiswa</h2>
-        <p id="user-nim">NIM: —</p>
-      </div>
-      <button class="logout-btn" onclick="handleLogout()">Keluar</button>
-    </div>
+    <div class="topbar"><div class="user-info"><h2 id="user-greeting">Halo, Mahasiswa</h2><p id="user-nim">NIM: —</p></div><button class="logout-btn" onclick="handleLogout()">Keluar</button></div>
     <div class="date-badge" id="dateBadge"></div>
     <h3 class="section-title">Jadwal & Absensi Hari Ini</h3>
     <div id="courseList"></div>
-    <div class="history-section">
-      <h3 class="section-title" style="margin-top:2.5rem;">Riwayat Absensi</h3>
-      <div id="historyList">
-        <div class="history-empty">Belum ada riwayat absensi.</div>
-      </div>
-    </div>
+    <div class="history-section"><h3 class="section-title" style="margin-top:2.5rem;">Riwayat Absensi</h3><div id="historyList"><div class="history-empty">Belum ada riwayat absensi.</div></div></div>
   </div>
-
 </div>
 
 <script>
@@ -232,183 +133,73 @@ var COURSES = [
   { name: 'Bahasa Arab III',  time: '11:00 – 12:30', lecturer: 'Ust. Muhammad Ridwan, M.Pd' },
   { name: 'Aqidah Akhlak',   time: '13:30 – 15:00', lecturer: 'Dr. H. Nuruddin, M.Si' }
 ];
-
 var todayAttendance = {};
 
-/* ══════════════════════════════════════════
-   KONEKSI LANGSUNG (TANPA CDN/DOWNLOAD FILE)
-   ══════════════════════════════════════════ */
 var SB = {
   url: SUPABASE_URL,
   key: SUPABASE_KEY,
   token: localStorage.getItem('sb_unu_token') || null,
-
   signUp: function(email, password, metadata) {
-    return fetch(this.url + '/auth/v1/signup', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'apikey': this.key },
-      body: JSON.stringify({ email: email, password: password, data: metadata })
-    }).then(function(r) { return r.json(); }).then(function(data) {
-      if (data.error) return { data: null, error: data };
-      if (data.msg) return { data: null, error: { message: data.msg } };
-      return { data: data, error: null };
-    });
+    return fetch(this.url + '/auth/v1/signup', { method: 'POST', headers: { 'Content-Type': 'application/json', 'apikey': this.key }, body: JSON.stringify({ email: email, password: password, data: metadata }) }).then(function(r) { return r.json(); });
   },
-
   signIn: function(email, password) {
-    return fetch(this.url + '/auth/v1/token?grant_type=password', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'apikey': this.key },
-      body: JSON.stringify({ email: email, password: password })
-    }).then(function(r) { return r.json(); }).then(function(data) {
-      if (data.access_token) {
-        SB.token = data.access_token;
-        localStorage.setItem('sb_unu_token', data.access_token);
-        return { data: { user: data.user }, error: null };
-      }
-      if (data.error) return { data: null, error: data };
-      return { data: null, error: { message: data.msg || 'Gagal masuk' } };
-    });
+    return fetch(this.url + '/auth/v1/token?grant_type=password', { method: 'POST', headers: { 'Content-Type': 'application/json', 'apikey': this.key }, body: JSON.stringify({ email: email, password: password }) }).then(function(r) { return r.json(); });
   },
-
   getUser: function() {
-    if (!this.token) return Promise.resolve({ data: { user: null } });
-    return fetch(this.url + '/auth/v1/user', {
-      headers: { 'apikey': this.key, 'Authorization': 'Bearer ' + this.token }
-    }).then(function(r) { return r.json(); }).then(function(data) {
-      if (data.id) return { data: { user: data } };
-      SB.token = null;
-      localStorage.removeItem('sb_unu_token');
-      return { data: { user: null } };
-    });
+    if (!this.token) return Promise.resolve({ id: null });
+    return fetch(this.url + '/auth/v1/user', { headers: { 'apikey': this.key, 'Authorization': 'Bearer ' + this.token } }).then(function(r) { return r.json(); });
   },
-
-  signOut: function() {
-    var tkn = this.token;
-    this.token = null;
-    localStorage.removeItem('sb_unu_token');
-    if (tkn) {
-      return fetch(this.url + '/auth/v1/logout', {
-        method: 'POST',
-        headers: { 'apikey': this.key, 'Authorization': 'Bearer ' + tkn }
-      }).catch(function() {});
-    }
-    return Promise.resolve();
-  },
-
+  signOut: function() { this.token = null; localStorage.removeItem('sb_unu_token'); },
   from: function(table) {
+    var tkn = this.token || '';
     return {
       select: function(cols) {
         return {
-          order: function(col, dir) {
-            return {
-              limit: function(n) {
-                return fetch(SB.url + '/rest/v1/' + table + '?select=' + cols + '&order=' + col + '.' + dir + '&limit=' + n, {
-                  headers: { 'apikey': SB.key, 'Authorization': 'Bearer ' + (SB.token || ''), 'Content-Type': 'application/json' }
-                }).then(function(r) { return r.json(); });
-              }
-            };
-          },
-          single: function() {
-            return fetch(SB.url + '/rest/v1/' + table + '?select=' + cols + '&limit=1', {
-              headers: { 'apikey': SB.key, 'Authorization': 'Bearer ' + (SB.token || ''), 'Content-Type': 'application/json' }
-            }).then(function(r) { return r.json(); }).then(function(data) {
-              return { data: (data && data.length > 0) ? data[0] : null, error: (data.msg || data.code) ? { msg: data.msg, code: data.code } : null };
-            });
-          }
+          order: function(col, dir) { return { limit: function(n) { return fetch(SB.url + '/rest/v1/' + table + '?select=' + cols + '&order=' + col + '.' + dir + '&limit=' + n, { headers: { 'apikey': SB.key, 'Authorization': 'Bearer ' + tkn } }).then(function(r) { return r.json(); }); }}; },
+          single: function() { return fetch(SB.url + '/rest/v1/' + table + '?select=' + cols + '&limit=1', { headers: { 'apikey': SB.key, 'Authorization': 'Bearer ' + tkn } }).then(function(r) { return r.json(); }).then(function(d) { return { data: (d && d.length > 0) ? d[0] : null, error: (d.msg || d.code) ? d : null }; }); }
         };
       },
       insert: function(rows) {
-        return fetch(SB.url + '/rest/v1/' + table, {
-          method: 'POST',
-          headers: { 'apikey': SB.key, 'Authorization': 'Bearer ' + (SB.token || ''), 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
-          body: JSON.stringify(rows)
-        }).then(function(r) {
-          if (r.status === 201) return { data: rows, error: null };
-          return r.json().then(function(err) { return { data: null, error: err }; }).catch(function() { return { data: null, error: { msg: 'Gagal menyimpan' } }; });
-        });
+        return fetch(SB.url + '/rest/v1/' + table, { method: 'POST', headers: { 'apikey': SB.key, 'Authorization': 'Bearer ' + tkn, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' }, body: JSON.stringify(rows) }).then(function(r) { if (r.status === 201) return { error: null }; return r.json(); }).catch(function(e) { return { error: { message: e.message } }; });
       }
     };
   }
 };
 
-/* Cek session tersimpan */
-SB.getUser().then(function(result) {
-  if (result.data.user) { enterDashboard(result.data.user); }
-});
+SB.getUser().then(function(u) { if (u.id) enterDashboard(u); });
 
-function showToast(type, title, message) {
-  var container = document.getElementById('toastContainer');
-  var icons = { success: '\u2713', error: '\u2715', warning: '!' };
-  var toast = document.createElement('div');
-  toast.className = 'toast ' + type;
-  toast.innerHTML = '<div class="toast-icon">' + (icons[type] || '\u00B7') + '</div><div class="toast-text"><strong>' + title + '</strong><span>' + message + '</span></div>';
-  container.appendChild(toast);
-  setTimeout(function() {
-    toast.classList.add('leaving');
-    toast.addEventListener('animationend', function() { toast.remove(); });
-  }, 4500);
+function showToast(t, title, msg) {
+  var c = document.getElementById('toastContainer'); var icons = { success: '\u2713', error: '\u2715', warning: '!' };
+  var toast = document.createElement('div'); toast.className = 'toast ' + t;
+  toast.innerHTML = '<div class="toast-icon">' + (icons[t]||'\u00B7') + '</div><div class="toast-text"><strong>' + title + '</strong><span>' + msg + '</span></div>';
+  c.appendChild(toast);
+  setTimeout(function() { toast.classList.add('leaving'); toast.addEventListener('animationend', function() { toast.remove(); }); }, 6000);
 }
 
 function switchTab(tab) {
-  var tabs = document.querySelectorAll('.tab-btn');
-  var forms = document.querySelectorAll('.form-group');
+  var tabs = document.querySelectorAll('.tab-btn'); var forms = document.querySelectorAll('.form-group');
   for (var i = 0; i < tabs.length; i++) tabs[i].classList.remove('active');
   for (var i = 0; i < forms.length; i++) forms[i].classList.remove('active');
-  if (tab === 'login') {
-    tabs[0].classList.add('active');
-    document.getElementById('login-form').classList.add('active');
-  } else {
-    tabs[1].classList.add('active');
-    document.getElementById('signup-form').classList.add('active');
-  }
+  if (tab === 'login') { tabs[0].classList.add('active'); document.getElementById('login-form').classList.add('active'); }
+  else { tabs[1].classList.add('active'); document.getElementById('signup-form').classList.add('active'); }
   clearAllErrors();
 }
 
-function togglePass(inputId, btn) {
-  var input = document.getElementById(inputId);
-  if (!input) return;
-  if (input.type === 'password') { input.type = 'text'; btn.innerHTML = '&#128374;'; }
-  else { input.type = 'password'; btn.innerHTML = '&#128065;'; }
-}
+function togglePass(id, btn) { var i = document.getElementById(id); if (!i) return; i.type = i.type === 'password' ? 'text' : 'password'; btn.innerHTML = i.type === 'text' ? '&#128374;' : '&#128065;'; }
 
-function showError(id, msg) {
-  var el = document.getElementById(id);
-  if (el) { el.textContent = msg; el.classList.add('show'); }
-  var field = el ? el.parentElement : null;
-  if (field) { var inp = field.querySelector('input'); if (inp) inp.classList.add('invalid'); }
-}
-function clearAllErrors() {
-  var errs = document.querySelectorAll('.field-error');
-  for (var i = 0; i < errs.length; i++) { errs[i].textContent = ''; errs[i].classList.remove('show'); }
-  var inv = document.querySelectorAll('input.invalid');
-  for (var i = 0; i < inv.length; i++) inv[i].classList.remove('invalid');
-}
-function setLoading(btnId, loading) {
-  var btn = document.getElementById(btnId);
-  if (!btn) return;
-  if (loading) { btn.classList.add('loading'); btn.disabled = true; }
-  else { btn.classList.remove('loading'); btn.disabled = false; }
-}
+function showError(id, msg) { var el = document.getElementById(id); if (el) { el.textContent = msg; el.classList.add('show'); } var f = el ? el.parentElement : null; if (f) { var inp = f.querySelector('input'); if (inp) inp.classList.add('invalid'); } }
+function clearAllErrors() { var e = document.querySelectorAll('.field-error'); for (var i = 0; i < e.length; i++) { e[i].textContent = ''; e[i].classList.remove('show'); } var inv = document.querySelectorAll('input.invalid'); for (var i = 0; i < inv.length; i++) inv[i].classList.remove('invalid'); }
+function setLoading(id, l) { var b = document.getElementById(id); if (!b) return; if (l) { b.classList.add('loading'); b.disabled = true; } else { b.classList.remove('loading'); b.disabled = false; } }
 function validateEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
 function validateNIM(n) { return /^\d{10}$/.test(n); }
 
-document.getElementById('signup-nim').addEventListener('input', function() {
-  this.value = this.value.replace(/\D/g, '').slice(0, 10);
-});
+document.getElementById('signup-nim').addEventListener('input', function() { this.value = this.value.replace(/\D/g, '').slice(0, 10); });
 var allInputs = document.querySelectorAll('.field input');
-for (var i = 0; i < allInputs.length; i++) {
-  (function(inp) {
-    inp.addEventListener('input', function() {
-      var f = inp.closest('.field');
-      if (f) f = f.querySelector('.field-error');
-      if (f && f.classList.contains('show')) { f.textContent = ''; f.classList.remove('show'); inp.classList.remove('invalid'); }
-    });
-  })(allInputs[i]);
-}
+for (var i = 0; i < allInputs.length; i++) { (function(inp) { inp.addEventListener('input', function() { var f = inp.closest('.field'); if (f) f = f.querySelector('.field-error'); if (f && f.classList.contains('show')) { f.textContent = ''; f.classList.remove('show'); inp.classList.remove('invalid'); } }); })(allInputs[i]); }
 
 function handleSignup(e) {
   e.preventDefault(); clearAllErrors();
+  if (SUPABASE_KEY.indexOf('PASTE_') !== -1) { showToast('error', 'Key Salah', 'Anda belum mengganti PASTE_ANON_KEY_ANDA_DISINI di kode HTML dengan Key asli dari Supabase.'); return; }
   var nama = document.getElementById('signup-nama').value.trim();
   var nim = document.getElementById('signup-nim').value.trim();
   var email = document.getElementById('signup-email').value.trim();
@@ -422,20 +213,23 @@ function handleSignup(e) {
   setLoading('signup-btn', true);
   SB.signUp(email, password, { nama: nama, nim: nim }).then(function(result) {
     setLoading('signup-btn', false);
-    if (result.error) {
-      var errStr = (result.error.error_description || result.error.message || result.error.msg || '');
-      if (errStr.indexOf('already registered') !== -1) { showError('signup-email-error', 'Email ini sudah terdaftar.'); }
-      else { showToast('error', 'Gagal Daftar', errStr); }
-    } else {
+    if (result.access_token || !result.error) {
       showToast('success', 'Berhasil Daftar', 'Silakan masuk dengan akun Anda.');
-      document.getElementById('signup-form').reset();
-      switchTab('login');
+      document.getElementById('signup-form').reset(); switchTab('login');
+    } else {
+      var errMsg = (result.error_description || result.msg || result.message || JSON.stringify(result));
+      if (errMsg.indexOf('already registered') !== -1) { showError('signup-email-error', 'Email ini sudah terdaftar.'); }
+      else { showToast('error', 'Gagal Daftar', errMsg); }
     }
-  }).catch(function() { setLoading('signup-btn', false); showToast('error', 'Kesalahan', 'Terjadi error tidak terduga.'); });
+  }).catch(function(err) {
+    setLoading('signup-btn', false);
+    showToast('error', 'Gagal Terhubung', 'Error: ' + err.message + '. Kemungkinan jaringan Anda memblokir situs Supabase.');
+  });
 }
 
 function handleLogin(e) {
   e.preventDefault(); clearAllErrors();
+  if (SUPABASE_KEY.indexOf('PASTE_') !== -1) { showToast('error', 'Key Salah', 'Anda belum mengganti PASTE_ANON_KEY_ANDA_DISINI di kode HTML dengan Key asli dari Supabase.'); return; }
   var email = document.getElementById('login-email').value.trim();
   var password = document.getElementById('login-password').value;
   var valid = true;
@@ -445,13 +239,18 @@ function handleLogin(e) {
   setLoading('login-btn', true);
   SB.signIn(email, password).then(function(result) {
     setLoading('login-btn', false);
-    if (result.error) {
-      var errStr = (result.error.error_description || result.error.message || '');
-      if (errStr.indexOf('Invalid') !== -1) { showError('login-password-error', 'Email atau password salah.'); }
-      else if (errStr.indexOf('not confirmed') !== -1) { showError('login-email-error', 'Akun belum diverifikasi. Cek email Anda.'); }
-      else { showToast('error', 'Gagal Masuk', errStr); }
-    } else { enterDashboard(result.data.user); }
-  }).catch(function() { setLoading('login-btn', false); showToast('error', 'Kesalahan', 'Terjadi error tidak terduga.'); });
+    if (result.access_token) {
+      SB.token = result.access_token; localStorage.setItem('sb_unu_token', result.access_token);
+      enterDashboard(result.user);
+    } else {
+      var errMsg = (result.error_description || result.msg || result.message || JSON.stringify(result));
+      if (errMsg.indexOf('Invalid') !== -1) { showError('login-password-error', 'Email atau password salah.'); }
+      else { showToast('error', 'Gagal Masuk', errMsg); }
+    }
+  }).catch(function(err) {
+    setLoading('login-btn', false);
+    showToast('error', 'Gagal Terhubung', 'Error: ' + err.message + '. Kemungkinan jaringan Anda memblokir situs Supabase.');
+  });
 }
 
 function enterDashboard(user) {
@@ -459,31 +258,25 @@ function enterDashboard(user) {
   var nim = (user.user_metadata && user.user_metadata.nim) ? user.user_metadata.nim : '\u2014';
   document.getElementById('user-greeting').textContent = 'Halo, ' + nama;
   document.getElementById('user-nim').textContent = 'NIM: ' + nim;
-  var now = new Date();
-  document.getElementById('dateBadge').textContent = now.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  document.getElementById('dateBadge').textContent = new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
   renderCourses(); loadHistory();
   document.getElementById('auth-section').style.display = 'none';
   document.getElementById('dashboard-section').classList.add('active');
 }
 
 function renderCourses() {
-  var container = document.getElementById('courseList'); container.innerHTML = '';
+  var c = document.getElementById('courseList'); c.innerHTML = '';
   for (var i = 0; i < COURSES.length; i++) {
-    var c = COURSES[i]; var done = todayAttendance[c.name];
-    var card = document.createElement('div'); card.className = 'card';
-    var btn = done ? '<button class="absen-btn done" disabled>\u2713 Tercatat</button>' : '<button class="absen-btn" onclick="handleAbsen(this,\'' + c.name.replace(/'/g, "\\'") + '\')">Tandai Hadir</button>';
-    card.innerHTML = '<div class="card-info"><h3>' + c.name + '</h3><p>' + c.time + ' | ' + c.lecturer + '</p></div>' + btn;
-    container.appendChild(card);
+    var course = COURSES[i]; var done = todayAttendance[course.name]; var card = document.createElement('div'); card.className = 'card';
+    var btn = done ? '<button class="absen-btn done" disabled>\u2713 Tercatat</button>' : '<button class="absen-btn" onclick="handleAbsen(this,\'' + course.name.replace(/'/g, "\\'") + '\')">Tandai Hadir</button>';
+    card.innerHTML = '<div class="card-info"><h3>' + course.name + '</h3><p>' + course.time + ' | ' + course.lecturer + '</p></div>' + btn; c.appendChild(card);
   }
 }
 
 function handleAbsen(btn, courseName) {
-  var orig = btn.innerHTML;
-  btn.innerHTML = '<span style="display:inline-block;width:14px;height:14px;border:2px solid transparent;border-top-color:currentColor;border-radius:50%;animation:spin .6s linear infinite;"></span>';
-  btn.classList.add('loading');
+  var orig = btn.innerHTML; btn.innerHTML = '<span style="display:inline-block;width:14px;height:14px;border:2px solid transparent;border-top-color:currentColor;border-radius:50%;animation:spin .6s linear infinite;"></span>'; btn.classList.add('loading');
   Promise.all([SB.getUser(), SB.from('profiles').select('nim').single()]).then(function(res) {
-    var user = res[0].data.user;
-    if (!user) { btn.innerHTML = orig; btn.classList.remove('loading'); showToast('error', 'Sesi Habis', 'Silakan masuk kembali.'); handleLogout(); return; }
+    var user = res[0]; if (!user.id) { btn.innerHTML = orig; btn.classList.remove('loading'); showToast('error', 'Sesi Habis', 'Silakan masuk kembali.'); handleLogout(); return; }
     var nama = (user.user_metadata && user.user_metadata.nama) ? user.user_metadata.nama : 'Mahasiswa';
     var nim = (res[1].data && res[1].data.nim) ? res[1].data.nim : '';
     return SB.from('attendance').insert([{ user_id: user.id, student_name: nama, nim: nim, course_name: courseName, status: 'hadir' }]);
@@ -491,40 +284,25 @@ function handleAbsen(btn, courseName) {
     if (!result) return;
     if (result.error) {
       btn.innerHTML = orig; btn.classList.remove('loading');
-      var errMsg = (result.error.msg || result.error.message || '');
-      if (result.error.code === '23505' || errMsg.indexOf('duplicate') !== -1 || errMsg.indexOf('unique') !== -1) {
-        todayAttendance[courseName] = true; renderCourses();
-        showToast('warning', 'Sudah Tercatat', 'Anda sudah absen ' + courseName + ' hari ini.');
-      } else {
-        btn.classList.add('error-state'); setTimeout(function() { btn.classList.remove('error-state'); }, 2000);
-        showToast('error', 'Gagal Absen', errMsg);
-      }
-    } else {
-      todayAttendance[courseName] = true; renderCourses();
-      showToast('success', 'Absensi Berhasil', courseName + ' \u2014 hadir tercatat.');
-      loadHistory();
-    }
-  }).catch(function() { btn.innerHTML = orig; btn.classList.remove('loading'); showToast('error', 'Kesalahan', 'Gagal terhubung ke server.'); });
+      var e = (result.msg || result.message || '');
+      if (result.code === '23505' || e.indexOf('duplicate') !== -1) { todayAttendance[courseName] = true; renderCourses(); showToast('warning', 'Sudah Tercatat', 'Anda sudah absen ' + courseName + ' hari ini.'); }
+      else { btn.classList.add('error-state'); setTimeout(function() { btn.classList.remove('error-state'); }, 2000); showToast('error', 'Gagal Absen', e); }
+    } else { todayAttendance[courseName] = true; renderCourses(); showToast('success', 'Absensi Berhasil', courseName + ' \u2014 hadir tercatat.'); loadHistory(); }
+  }).catch(function(err) { btn.innerHTML = orig; btn.classList.remove('loading'); showToast('error', 'Kesalahan', err.message); });
 }
 
 function loadHistory() {
-  var container = document.getElementById('historyList');
+  var c = document.getElementById('historyList');
   SB.from('attendance').select('*').order('created_at', { ascending: false }).limit(20).then(function(result) {
-    if (result.error) { container.innerHTML = '<div class="history-empty">Gagal memuat riwayat.</div>'; return; }
-    if (!result.data || result.data.length === 0) { container.innerHTML = '<div class="history-empty">Belum ada riwayat absensi.</div>'; return; }
+    if (result.error) { c.innerHTML = '<div class="history-empty">Gagal memuat riwayat.</div>'; return; }
+    if (!result || result.length === 0) { c.innerHTML = '<div class="history-empty">Belum ada riwayat absensi.</div>'; return; }
     var todayStr = new Date().toISOString().slice(0, 10); var needRerender = false;
-    for (var i = 0; i < result.data.length; i++) {
-      var rd = new Date(result.data[i].created_at).toISOString().slice(0, 10);
-      if (rd === todayStr && !todayAttendance[result.data[i].course_name]) { todayAttendance[result.data[i].course_name] = true; needRerender = true; }
-    }
+    for (var i = 0; i < result.length; i++) { var rd = new Date(result[i].created_at).toISOString().slice(0, 10); if (rd === todayStr && !todayAttendance[result[i].course_name]) { todayAttendance[result[i].course_name] = true; needRerender = true; } }
     if (needRerender) renderCourses();
     var html = '<div class="history-list">';
-    for (var i = 0; i < result.data.length; i++) {
-      var r = result.data[i]; var d = new Date(r.created_at);
-      html += '<div class="history-item"><div><span class="h-course">' + r.course_name + '</span><span class="h-date" style="margin-left:.6rem">' + d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) + ' ' + d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + '</span></div><span class="h-status">' + r.status + '</span></div>';
-    }
-    html += '</div>'; container.innerHTML = html;
-  }).catch(function() { container.innerHTML = '<div class="history-empty">Gagal memuat riwayat.</div>'; });
+    for (var i = 0; i < result.length; i++) { var r = result[i]; var d = new Date(r.created_at); html += '<div class="history-item"><div><span class="h-course">' + r.course_name + '</span><span class="h-date" style="margin-left:.6rem">' + d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) + ' ' + d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + '</span></div><span class="h-status">' + r.status + '</span></div>'; }
+    html += '</div>'; c.innerHTML = html;
+  }).catch(function() { c.innerHTML = '<div class="history-empty">Gagal memuat riwayat.</div>'; });
 }
 
 function handleLogout() {
